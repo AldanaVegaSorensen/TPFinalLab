@@ -1,0 +1,16 @@
+[
+  {
+    "id": 1,
+    "name": "Test",
+    "email": "test@test.com",
+    "password_hash": "$2b$10$OXfsmP/9j1rM.0CID1CXEOTAc3eMzYxeGqciayLnkV2dAxnGKRWMe",
+    "created_at": "2026-07-23T20:18:05.883Z"
+  },
+  {
+    "id": 2,
+    "name": "Aldana",
+    "email": "aldanavega14@gmail.com",
+    "password_hash": "$2b$10$7xEF3k3E2Xu30zmoiHLJpuIg6iOQEIUBpP5Sl/toWly0pX9ikITcy",
+    "created_at": "2026-07-23T20:27:53.887Z"
+  }
+]
