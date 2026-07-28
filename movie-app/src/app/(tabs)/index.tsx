@@ -1,18 +1,58 @@
-import { Text, View } from 'react-native';
+import { useEffect, useState } from "react";
+import { ScrollView, ActivityIndicator, View } from "react-native";
 
-import { useSession } from '@/src/context/AuthContext';
+import MovieCarousel from "@/src/components/movieCarrousel";
+import { movieService } from "@/src/services/movie.service";
+import { HomeSection } from "@/src/types/home";
 
-export default function Index() {
-  const { signOut } = useSession();
+export default function Home() {
+
+  const [sections, setSections] = useState<HomeSection[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+
+    async function loadHome() {
+
+      try {
+
+        const { data } = await movieService.getHome();
+
+        setSections(data);
+
+      } catch (err) {
+
+        console.log(err);
+
+      } finally {
+
+        setLoading(false);
+
+      }
+
+    }
+
+    loadHome();
+
+  }, []);
+
+  if (loading) {
+    return (
+      <View>
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  }
+
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text
-        onPress={() => {
-          // The guard in `RootNavigator` redirects back to the sign-in screen.
-          signOut();
-        }}>
-        Sign Out
-      </Text>
-    </View>
+    <ScrollView>
+      {sections.map((section) => (
+        <MovieCarousel
+          key={`${section.type}-${section.title}`}
+          title={section.title}
+          movies={section.movies}
+        />
+      ))}
+    </ScrollView>
   );
 }

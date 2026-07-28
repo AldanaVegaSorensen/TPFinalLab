@@ -12,12 +12,27 @@ export default function Login() {
   const [error, setError] = useState<string | null>(null);
 
   const handleLogin = async () => {
+    setError(null)
+    
+    if (!email.trim()) {
+      setError('Ingresá un email.');
+      return;
+    }
+
+    if (!password) {
+      setError('Ingresá una contraseña.');
+      return;
+    }
+
     try {
       await signIn(email, password);
       router.replace('/');
-    } catch {
-      setError('Credenciales inválidas');
-      console.log('Error de inicio de sesión');
+    } catch (err: any) {
+      
+      console.log(err.response.status)
+      const message = err.response?.data?.error || "Ocurrió un error al iniciar sesión";
+      setError(message);
+      
     }
   };
 

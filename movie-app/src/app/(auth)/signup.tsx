@@ -13,12 +13,31 @@ export default function Register() {
   const [error, setError] = useState<string | null>(null);
 
   const handleRegister = async () => {
+    setError(null)
+
+    if (!name.trim()) {
+      setError('Ingresá un name.');
+      return;
+    }
+    
+    if (!email.trim()) {
+      setError('Ingresá un email.');
+      return;
+    }
+
+    if (!password) {
+      setError('Ingresá una contraseña.');
+      return;
+    }
+
+
     try {
       await signUp(name, email, password);
       router.replace('/');
-    } catch {
-      setError('No se pudo crear la cuenta');
-      console.log('Error de registro');
+    } catch (err: any) {
+      console.log(err.response.status)
+      const message = err.response?.data?.error || "Ocurrió un error al registrarse";
+      setError(message);
     }
   };
 
