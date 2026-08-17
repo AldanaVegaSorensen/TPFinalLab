@@ -4,7 +4,8 @@ require('dotenv').config();
 
 const authRoutes = require('./routes/auth.routes');
 const movieRoutes = require("./routes/movies.routes"); 
-const homeRoutes = require("./routes/home.routes");
+const reviewRoutes = require('./routes/review.routes');
+const listRoutes = require('./routes/list.routes');
 
 const app = express();
 
@@ -12,10 +13,9 @@ app.use(cors());
 app.use(express.json());
 
 app.use('/auth', authRoutes);
-
 app.use("/movies", movieRoutes);
-
-app.use("/home", homeRoutes);
+app.use('/reviews', reviewRoutes);
+app.use('/lists', listRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, "0.0.0.0",  () => {
