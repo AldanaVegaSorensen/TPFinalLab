@@ -1,6 +1,11 @@
-import { Stack } from 'expo-router';
+import { Tabs } from "expo-router";
 
 export default function AppLayout() {
-  // This renders the navigation stack for all authenticated app routes.
-  return <Stack />;
+  return (
+    <Tabs
+      screenOptions={{
+        headerShown: false,
+      }}
+    />
+  );
 }

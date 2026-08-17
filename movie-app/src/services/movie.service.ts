@@ -1,18 +1,46 @@
 import api from "./api";
 
+const CATEGORY_ROUTES: Record<string, string> = {
+  popular: "popular",
+  top_rated: "top-rated",
+  upcoming: "upcoming",
+  now_playing: "now-playing"
+};
+
 export const movieService = {
+  async getPopular() {
+    const { data } = await api.get("/movies/popular");
+    return data;
+  },
 
-  getPopular: () => api.get("/movies/popular"),
+  async getMovie(id: number) {
+    const { data } = await api.get(`/movies/${id}`);
+    return data;
+  },
 
-  getMovie: (id: number) => api.get(`/movies/${id}`),
+  async getTopRated() {
+    const { data } = await api.get("/movies/top-rated");
+    return data;
+  },
 
-  getTopRated: () => api.get("movies/top-rated"),
+  async getUpcoming() {
+    const { data } = await api.get("/movies/upcoming");
+    return data;
+  },
 
-  getUpcoming: () => api.get("/movies/upcoming"),
+  async getByGenre(genreId: number) {
+    const { data } = await api.get(`/movies/genre/${genreId}`);
+    return data;
+  },
 
-  getByGenre: (genreId: number) => api.get(`/movies/genre/${genreId}`),
+  async getNowPlaying() {
+    const { data } = await api.get("/movies/now-playing");
+    return data;
+  },
 
-  getHome: () => api.get("/movies/home"),
-
-  
+  async getMovies(category: string) {
+    const route = CATEGORY_ROUTES[category];
+    const { data } = await api.get(`/movies/${route}`);
+    return data;
+  }
 };

@@ -54,6 +54,24 @@ async function upcoming(req, res) {
     }
 }
 
+async function nowPlaying(req, res) {
+    try {
+
+        const movies = await movieService.getNowPlayingMovies();
+
+        res.json(movies);
+
+    } catch (err) {
+
+        console.error(err);
+
+        res.status(500).json({
+            error: "No se pudieron obtener las películas."
+        });
+
+    }
+}
+
 async function byGenre(req, res) {
   try {
     const { genreId } = req.params;
@@ -72,22 +90,7 @@ async function byGenre(req, res) {
   }
 }
 
-async function home(req, res) {
-  try {
-    const sections = await movieService.getHomeMovies();
 
-    res.json(sections);
-
-  } catch (err) {
-
-    console.error(err);
-
-    res.status(500).json({
-      error: "No se pudo cargar el inicio.",
-    });
-
-  }
-}
 
 
 module.exports = {
@@ -95,5 +98,5 @@ module.exports = {
     topRated,
     upcoming,
     byGenre,
-    home
+    nowPlaying,
 };

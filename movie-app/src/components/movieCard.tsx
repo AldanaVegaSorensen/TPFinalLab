@@ -15,7 +15,8 @@ export default function MovieCard({ movie }: Props) {
         }}
         style={{
           width: 120,
-          height: 180
+          height: 180,
+          borderRadius: 16
         }}
       />
     </Pressable>

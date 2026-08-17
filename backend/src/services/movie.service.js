@@ -26,6 +26,12 @@ async function getUpcomingMovies() {
     return data.results;
 }
 
+async function getNowPlayingMovies() {
+    const { data } = await api.get("/movie/now_playing");
+
+    return data.results;
+}
+
 async function getMoviesByGenre(genreId) {
   const { data } = await api.get("/discover/movie", {
     params: {
@@ -36,48 +42,11 @@ async function getMoviesByGenre(genreId) {
   return data.results;
 }
 
-async function getHomeMovies() {
-  const genres = [
-    { id: 28, title: "Acción" },
-    { id: 35, title: "Comedia" },
-    { id: 27, title: "Terror" },
-    { id: 16, title: "Animación" },
-  ];
-
-  const [popular, upcoming] = await Promise.all([
-    getPopularMovies(),
-    getUpcomingMovies(),
-  ]);
-
-  const genreSections = await Promise.all(
-    genres.map(async (genre) => ({
-      type: "genre",
-      title: genre.title,
-      movies: await getMoviesByGenre(genre.id),
-    }))
-  );
-
-  return [
-    {
-      type: "popular",
-      title: "Populares",
-      movies: popular,
-    },
-
-    {
-      type: "upcoming",
-      title: "Próximamente",
-      movies: upcoming,
-    },
-
-    ...genreSections,
-  ];
-}
 
 module.exports = {
     getPopularMovies,
     getTopRatedMovies,
     getUpcomingMovies,
     getMoviesByGenre,
-    getHomeMovies,
+    getNowPlayingMovies,
 };
