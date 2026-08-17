@@ -12,5 +12,26 @@
     "email": "aldanavega14@gmail.com",
     "password_hash": "$2b$10$UyXUWbuRE8mYEadkyTh/CuPWbgeRFAxU8MXOY.RfOneKZzirDoBPe",
     "created_at": "2026-07-28T03:59:11.503Z"
+  },
+  {
+    "id": 3,
+    "name": "Martina",
+    "email": "martina@test.com",
+    "password_hash": "$2b$10$7K.IPuw7pXWcBwn/ZqQJIOUTwgk.DDX7.r9AYS9qzsYPXfnDWmXqK",
+    "created_at": "2026-08-17T19:48:07.950Z"
+  },
+  {
+    "id": 4,
+    "name": "Aldana",
+    "email": "aldana@test.com",
+    "password_hash": "$2b$10$jmxJu8s1TrNfekuLdyhtbuYf12NKKcaUw3r3iGhlh8n39.CeM4qZy",
+    "created_at": "2026-08-17T19:48:35.851Z"
+  },
+  {
+    "id": 5,
+    "name": "Santiago",
+    "email": "santiago@test.com",
+    "password_hash": "$2b$10$UhtD6GstnssX1CXHEs9NwuhxFElpe3jIMxSU3jx9.0Z9SRutUVW1i",
+    "created_at": "2026-08-17T19:49:11.224Z"
   }
 ]

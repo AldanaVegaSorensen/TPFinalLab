@@ -4,6 +4,7 @@ import { useMovies } from "@/src/hooks/useMovies";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import CircularSlider from "@/src/components/circularSlider";
+import { router } from "expo-router";
 
 
 export default function Home() {
@@ -56,7 +57,7 @@ export default function Home() {
             style={styles.logo}
           />
 
-          <Pressable>
+          <Pressable onPress={()=> router.push("/(tabs)/search")}>
             <Ionicons
               name="search"
               size={24}

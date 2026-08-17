@@ -94,19 +94,19 @@ async function byId(req, res) {
   try {
     const { id } = req.params;
 
-    console.log("ID recibido:",id)
+    //console.log("ID recibido:",id)
 
     const movie = await movieService.getMovieById(id);
 
-    console.log("2. Movie obtenida:", movie);
+    //console.log("2. Movie obtenida:", movie);
 
     res.json(movie);
 
-    console.log("3. Respuesta enviada");
+    //console.log("3. Respuesta enviada");
 
   } catch (err) {
-    console.log("4. Entró al catch");
-    console.error("ERROR:", err);
+    //console.log("4. Entró al catch");
+    //console.error("ERROR:", err);
 
     res.status(500).json({
       error: "No se pudo obtener la película.",
@@ -114,7 +114,51 @@ async function byId(req, res) {
   }
 }
 
+async function getMovies(req, res){
+    try {
+        console.log("Dentro del controller de movies obteniendo todas las peliculas: ")
+        const page = Number(req.query.page) || 1;
+        console.log("PAGINAS: ",page)
 
+        const movies = await movieService.getMovies(page);
+        console.log("Peliculas de la pagina ",page,": ",movies)
+
+        res.json(movies);
+    } catch (error) {
+        console.error("Error obteniendo películas:", error);
+
+        res.status(500).json({
+            message: "Error al obtener las películas",
+        });
+    }
+};
+
+
+async function searchMovies(req, res) {
+    try {
+        const { query } = req.query;
+        const page = Number(req.query.page) || 1;
+
+        if (!query || !query.trim()) {
+            return res.status(400).json({
+                message: "La búsqueda es obligatoria",
+            });
+        }
+
+        const movies = await movieService.searchMovies(
+            query.trim(),
+            page
+        );
+
+        res.status(200).json(movies);
+    } catch (error) {
+        console.error("Error buscando películas:", error);
+
+        res.status(500).json({
+            message: "Error al buscar películas",
+        });
+    }
+};
 
 
 module.exports = {
@@ -124,4 +168,6 @@ module.exports = {
     byGenre,
     nowPlaying,
     byId,
+    getMovies,
+    searchMovies,
 };

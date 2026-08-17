@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 const filePath = path.join(__dirname, '../../data/reviews.json');
+const UserModel = require("./user.model");
 
 function readReviews() {
   const data = fs.readFileSync(filePath, 'utf-8');
@@ -32,8 +33,34 @@ const ReviewModel = {
   },
 
   async findByMovie(movieId) {
-    const reviews = readReviews();
-    return reviews.filter((review) => review.movie_id === movieId);
+    console.log("Dentro del model");
+
+    const reviewsData = readReviews();
+
+    const reviews = reviewsData.filter(
+        (review) =>
+            Number(review.movie_id) === Number(movieId)
+    );
+
+    const reviewsWithUsers = await Promise.all(
+        reviews.map(async (review) => {
+            const user = await UserModel.findById(review.user_id);
+
+            return {
+                ...review,
+                user: {
+                    name: user ? user.name : "Usuario desconocido",
+                },
+            };
+        })
+    );
+
+    console.log("Reseñas con usuarios:", reviewsWithUsers);
+
+    return reviewsWithUsers.sort(
+        (a, b) =>
+            new Date(b.created_at) - new Date(a.created_at)
+    );
   },
 };
 

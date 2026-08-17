@@ -8,6 +8,8 @@ import { useMovie } from "@/src/hooks/useMovie";
 import React from "react";
 import Cast from "@/src/components/Cast";
 import Crew from "@/src/components/Crew";
+import Reviews from "@/src/components/Review";
+import { useReview } from "@/src/hooks/useReview"
 
 const {width, height} = Dimensions.get('screen');
 
@@ -16,6 +18,7 @@ export default function MovieDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
 
   const { movie, loading, error } = useMovie(Number(id));
+  const { reviews, loading: reviewsLoading,} = useReview(Number(id));
     
   if (loading) {
     return (
@@ -121,7 +124,7 @@ export default function MovieDetailScreen() {
         </View>
 
         {/* REVIEWS MAS RECIENTES */}
-        
+        <Reviews reviews={reviews}/>
 
     </ScrollView>
   );

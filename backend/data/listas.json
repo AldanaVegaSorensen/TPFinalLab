@@ -1,3 +1,30 @@
 [
-    
+  {
+    "id": 1,
+    "user_id": 3,
+    "name": "Mi lista",
+    "movies": [550, 603, 680],
+    "created_at": "2026-08-05T14:00:00.000Z"
+  },
+  {
+    "id": 2,
+    "user_id": 4,
+    "name": "Para ver",
+    "movies": [278, 13],
+    "created_at": "2026-08-06T16:30:00.000Z"
+  },
+  {
+    "id": 3,
+    "user_id": 2,
+    "name": "Favoritas",
+    "movies": [550, 278],
+    "created_at": "2026-08-07T18:00:00.000Z"
+  },
+  {
+    "id": 4,
+    "user_id": 3,
+    "name": "Películas pendientes",
+    "movies": [603, 680, 13],
+    "created_at": "2026-08-08T20:15:00.000Z"
+  }
 ]

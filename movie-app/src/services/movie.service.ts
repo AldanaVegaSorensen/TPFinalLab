@@ -41,5 +41,27 @@ export const movieService = {
     const route = CATEGORY_ROUTES[category];
     const { data } = await api.get(`/movies/${route}`);
     return data;
-  }
+  },
+
+  async getAllMovies(page = 1) {
+    const { data } = await api.get("/movies", {
+      params: { page },
+    });
+
+    return data;
+  },
+
+  async searchMovies(query: string, page = 1) {
+  const { data } = await api.get("/movies/search", {
+    params: {
+      query,
+      page,
+    },
+  });
+
+  return data;
+},
+
+
+
 };

@@ -7,5 +7,6 @@ router.get("/upcoming", controller.popular);
 router.get("/now-playing", controller.nowPlaying);
 router.get("/genre/:genreId", controller.byGenre);
 router.get("/:id", controller.byId);
-
+router.get("/search", controller.searchMovies);
+router.get("/", controller.getMovies);
 module.exports = router;

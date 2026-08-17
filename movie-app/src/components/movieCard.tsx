@@ -19,6 +19,7 @@ export default function MovieCard({ movie }: Props) {
           height: 180,
           borderRadius: 16
         }}
+        resizeMode="cover"
       />
     </Pressable>
   );

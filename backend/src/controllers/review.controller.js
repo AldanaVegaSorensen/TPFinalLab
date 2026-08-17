@@ -18,9 +18,11 @@ async function createReview(req, res){
 
 const getReviewsByMovie = async (req, res) => {
   try {
-    const movieId = Number(req.params.movieId);
+    const { id } = req.params;
 
-    const reviews = await ReviewService.getReviewsByMovie(movieId);
+
+    const reviews = await reviewService.getReviewsByMovie(id);
+
 
     res.json(reviews);
 

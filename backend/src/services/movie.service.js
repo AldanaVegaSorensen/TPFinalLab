@@ -52,6 +52,29 @@ async function getMovieById(id) {
   return data;
 }
 
+async function getMovies(page = 1) {
+    const response = await api.get("/discover/movie", {
+        params: {
+            page,
+            sort_by: "popularity.desc",
+            include_adult: false,
+        },
+    });
+
+    return response.data;
+};
+
+async function searchMovies(query, page = 1){
+    const response = await tmdb.get("/search/movie", {
+        params: {
+            query,
+            page,
+            include_adult: false,
+        },
+    });
+
+    return response.data;
+};
 
 
 module.exports = {
@@ -61,4 +84,6 @@ module.exports = {
     getMoviesByGenre,
     getNowPlayingMovies,
     getMovieById,
+    getMovies,
+    searchMovies,
 };

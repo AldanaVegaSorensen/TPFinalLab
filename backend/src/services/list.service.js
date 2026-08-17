@@ -1,4 +1,4 @@
-const ListModel = require('../models/list.model');
+const ListModel = require('../models/lista.model');
 
 const ListService = {
 

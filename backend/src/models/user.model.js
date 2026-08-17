@@ -31,6 +31,11 @@ const UserModel = {
     const users = readUsers();
     return users.find((u) => u.email === email);
   },
+
+  async findById(id) {
+    const users = readUsers();
+    return users.find( (user) => Number(user.id) === Number(id) )
+  }
 };
 
 module.exports = UserModel;
