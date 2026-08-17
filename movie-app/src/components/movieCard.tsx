@@ -1,4 +1,5 @@
 import { Pressable, Image } from "react-native";
+import { router } from "expo-router";
 
 type Props = {
   movie: any;
@@ -6,7 +7,7 @@ type Props = {
 
 export default function MovieCard({ movie }: Props) {
   return (
-    <Pressable>
+    <Pressable onPress={()=> router.push(`/movie/${movie.id}`)}>
       <Image
         source={{
           uri:

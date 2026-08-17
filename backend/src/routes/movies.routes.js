@@ -6,5 +6,6 @@ router.get("/top-rated", controller.popular);
 router.get("/upcoming", controller.popular);
 router.get("/now-playing", controller.nowPlaying);
 router.get("/genre/:genreId", controller.byGenre);
+router.get("/:id", controller.byId);
 
 module.exports = router;

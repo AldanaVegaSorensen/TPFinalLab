@@ -90,6 +90,30 @@ async function byGenre(req, res) {
   }
 }
 
+async function byId(req, res) {
+  try {
+    const { id } = req.params;
+
+    console.log("ID recibido:",id)
+
+    const movie = await movieService.getMovieById(id);
+
+    console.log("2. Movie obtenida:", movie);
+
+    res.json(movie);
+
+    console.log("3. Respuesta enviada");
+
+  } catch (err) {
+    console.log("4. Entró al catch");
+    console.error("ERROR:", err);
+
+    res.status(500).json({
+      error: "No se pudo obtener la película.",
+    });
+  }
+}
+
 
 
 
@@ -99,4 +123,5 @@ module.exports = {
     upcoming,
     byGenre,
     nowPlaying,
+    byId,
 };

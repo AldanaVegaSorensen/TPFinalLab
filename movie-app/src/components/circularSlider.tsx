@@ -3,6 +3,7 @@ import { Movie } from '../types/movie';
 import MovieCardLarge from './movieCarLarge';
 import { Carousel } from "react-native-reanimated-carousel";
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { useNavigation } from 'expo-router';
 
 
 const { width, height } = Dimensions.get("screen")
@@ -16,10 +17,8 @@ type Props = {
 
 
 export default function CircularSlider( {title, movies}: Props){
-    
   return(
       <GestureHandlerRootView>
-        
         <View style={styles.container}>
           <Text style={styles.sectionTitle}>
             {title}

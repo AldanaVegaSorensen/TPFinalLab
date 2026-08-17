@@ -1,7 +1,6 @@
 import { ActivityIndicator, ScrollView, Text, View, StyleSheet, StatusBar, Image, Pressable } from "react-native";
 import MovieCarousel from "@/src/components/movieCarrousel";
 import { useMovies } from "@/src/hooks/useMovies";
-import { genres } from "@/src/constants/genres"
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import CircularSlider from "@/src/components/circularSlider";

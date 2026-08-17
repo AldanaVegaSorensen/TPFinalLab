@@ -13,9 +13,8 @@ export const movieService = {
     return data;
   },
 
-  async getMovie(id: number) {
-    const { data } = await api.get(`/movies/${id}`);
-    return data;
+  getMovie: (id: number) => {
+    return api.get(`/movies/${id}`);
   },
 
   async getTopRated() {

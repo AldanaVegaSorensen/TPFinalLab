@@ -42,6 +42,17 @@ async function getMoviesByGenre(genreId) {
   return data.results;
 }
 
+async function getMovieById(id) {
+  const { data } = await api.get(`/movie/${id}`,{
+    params: {
+        append_to_response: "credits",
+    }
+  });
+
+  return data;
+}
+
+
 
 module.exports = {
     getPopularMovies,
@@ -49,4 +60,5 @@ module.exports = {
     getUpcomingMovies,
     getMoviesByGenre,
     getNowPlayingMovies,
+    getMovieById,
 };

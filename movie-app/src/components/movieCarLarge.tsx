@@ -1,5 +1,6 @@
 import { Pressable, Image } from "react-native";
 import { Dimensions } from "react-native";
+import { router } from "expo-router";
 
 const { width:widthScreen, height:heightScreen } = Dimensions.get("screen");
 
@@ -12,7 +13,7 @@ type Props = {
 export default function MovieCardLarge({ movie, width = widthScreen * 0.7,
   height = heightScreen * 0.4 }: Props) {
   return (
-    <Pressable>
+    <Pressable onPress={()=> router.push(`/movie/${movie.id}`)}>
       <Image
         source={{
           uri:

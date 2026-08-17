@@ -1,7 +1,6 @@
 import { Stack } from 'expo-router';
 import { SessionProvider, useSession } from '@/src/context/AuthContext';
 import { SplashScreenController } from '@/src/splash';
-import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export default function Root() {
   // Set up the auth context and render your layout inside of it.
@@ -27,7 +26,16 @@ function RootNavigator() {
       <Stack.Protected guard={!session}>
         <Stack.Screen name="(auth)" />
       </Stack.Protected>
+
+      <Stack.Screen
+        name="movie/[id]"
+        options={{
+          headerShown: false,
+        }}
+      />
     </Stack>
+
+    
   );
 }
 
