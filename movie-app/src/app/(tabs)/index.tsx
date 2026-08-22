@@ -110,8 +110,8 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   logo: {
-    width: 48,
-    height: 40,
+    width: 45,
+    height: 45,
     marginLeft: 12
   },
   icons: {

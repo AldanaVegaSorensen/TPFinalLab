@@ -48,13 +48,14 @@ async function register(name, email, password) {
 
 async function login(email, password) {
     const user = await UserModel.findByEmail(email);
-
+    console.log(user)
     if (!user) {
       const error = new CustomError("Credenciales inválidas.", 400)
       throw error
     }
 
     const isValid = await bcrypt.compare(password, user.password_hash);
+
     if (!isValid) {
         const error = new CustomError("Credenciales inválidas.", 400)
       throw error
