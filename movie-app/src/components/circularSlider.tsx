@@ -3,7 +3,7 @@ import { Movie } from '../types/movie';
 import MovieCardLarge from './movieCarLarge';
 import { Carousel } from "react-native-reanimated-carousel";
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { useNavigation } from 'expo-router';
+import { COLORS } from '@/src/constants/colors';
 
 
 const { width, height } = Dimensions.get("screen")
@@ -67,6 +67,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 12,
     marginLeft: 10,
-    color:"white"
+    color: COLORS.text
   },
 });

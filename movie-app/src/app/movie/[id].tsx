@@ -1,15 +1,19 @@
-import { View, Text, ScrollView, StyleSheet, Pressable, Dimensions, ActivityIndicator, Image } from "react-native";
+import { View, Text, ScrollView, StyleSheet, Pressable, Dimensions, ActivityIndicator, Image, Modal } from "react-native";
 import { useLocalSearchParams } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons"; 
 import { router } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
 import { useMovie } from "@/src/hooks/useMovie";
-import React from "react";
+import React, { useState } from "react";
 import Cast from "@/src/components/Cast";
 import Crew from "@/src/components/Crew";
 import Reviews from "@/src/components/Review";
-import { useReview } from "@/src/hooks/useReview"
+import { useReviews } from "@/src/hooks/useReview"
+import { COLORS } from '@/src/constants/colors';
+import ModalReview from "@/src/components/ModalReview";
+import ModalLista from "@/src/components/ModalLista";
+import { useHistory } from "../../hooks/useHistory";
 
 const {width, height} = Dimensions.get('screen');
 
@@ -18,7 +22,65 @@ export default function MovieDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
 
   const { movie, loading, error } = useMovie(Number(id));
-  const { reviews, loading: reviewsLoading,} = useReview(Number(id));
+  const { reviews, loading: reviewsLoading, createReview, reloadReviews} = useReviews(Number(id));
+  const [isModalVisible, setIsModalVisible] = useState(false)
+  const [isListModalVisible, setIsListModalVisible] = useState(false);
+
+  const { addMovie: addToHistory} = useHistory();
+
+  const [lists, setLists] = useState([
+  { id: 1, name: "Películas favoritas" },
+  { id: 2, name: "Para ver" },
+  { id: 3, name: "Películas de terror" },
+]);
+
+    const handleSaveReview = async (
+    fecha: Date,
+    rating: number | null,
+    comment: string
+) => {
+
+    try {
+
+        const movieId = Number(id);
+
+        if (rating !== null) {
+
+            await createReview(
+                {movieId,
+                rating,
+                comment}
+            );
+
+            console.log("Review guardada:");
+        }
+
+        await addToHistory(
+            movieId,
+            fecha.toISOString()
+        );
+
+        await reloadReviews();
+
+        setIsModalVisible(false);
+
+    } catch (error: any) {
+    console.error(
+        "STATUS:",
+        error.response?.status
+    );
+
+    console.error(
+        "DATA:",
+        error.response?.data
+    );
+
+    console.error(
+        "REQUEST:",
+        error.config?.data
+    );
+}
+};
     
   if (loading) {
     return (
@@ -38,7 +100,7 @@ export default function MovieDetailScreen() {
 
   return (
     <ScrollView
-        contentContainerStyle={{paddingBottom:20, backgroundColor: '#414141',}}
+        contentContainerStyle={{paddingBottom:20, backgroundColor: COLORS.background,}}
     >
         <View style={{width: "100%"}}>
             {/*Header */}
@@ -69,7 +131,7 @@ export default function MovieDetailScreen() {
                     colors={[
                     "transparent",
                     "rgba(70, 66, 66, 0.5)",
-                    "#414141",
+                    COLORS.background,
                     ]}
                     start={{ x: 0.5, y: 0 }}
                     end={{ x: 0.5, y: 1 }}
@@ -99,7 +161,7 @@ export default function MovieDetailScreen() {
             <Pressable
                 style={styles.actionButton}
                 onPress={() => {
-                // agregar a lista
+                setIsListModalVisible(true)
                 }}
             >
                 <Ionicons name="add-circle" size={28} color="white" />
@@ -110,6 +172,7 @@ export default function MovieDetailScreen() {
                 style={styles.actionButton}
                 onPress={() => {
                 // realizar review
+                setIsModalVisible(true)
                 }}
             >
                 <Ionicons name="eye" size={28} color="white" />
@@ -126,6 +189,25 @@ export default function MovieDetailScreen() {
         {/* REVIEWS MAS RECIENTES */}
         <Reviews reviews={reviews}/>
 
+        {/*MODAL PARA REVIEW y agregar lista */}
+        <ModalReview
+            visible={isModalVisible}
+            onClose={() => setIsModalVisible(false)}
+            onSave={handleSaveReview}
+        />
+
+        <ModalLista
+            visible={isListModalVisible}
+            onClose={() => setIsListModalVisible(false)}
+            movieId={movie.id}
+            lists={lists}
+            onAddToList={(listId, movieId) => {
+                console.log("Agregar película", movieId, "a lista", listId);
+            }}
+            onCreateList={(name, movieId) => {
+                console.log("Crear lista", name, "con película", movieId);
+            }}
+        />
     </ScrollView>
   );
 }
@@ -141,18 +223,18 @@ const styles  = StyleSheet.create({
         paddingHorizontal: 4,
     },
     title:{
-        color:"white",
+        color:COLORS.text,
         textAlign:"center",
         fontSize: 24
     },
     info:{
-        color: "#a3a3a3",
+        color: COLORS.textSecondary,
         fontWeight: "600",
         fontSize: 16,
         textAlign: "center"
     },
     sinopsis:{
-        color: "#a3a3a3",
+        color: COLORS.textSecondary,
         fontSize: 15,
         lineHeight: 22,
         marginTop: 4,
@@ -169,7 +251,7 @@ const styles  = StyleSheet.create({
         flex: 1,
         height: 48,
         borderRadius: 10,
-        backgroundColor: "#926986",
+        backgroundColor: COLORS.primary,
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "center",
@@ -177,7 +259,7 @@ const styles  = StyleSheet.create({
     },
 
     actionText: {
-        color: "white",
+        color: COLORS.text,
         fontSize: 14,
         fontWeight: "600",
     },
@@ -188,7 +270,7 @@ const styles  = StyleSheet.create({
     },
 
     ratingText: {
-        color: "white",
+        color: COLORS.text,
         fontSize: 16,
         fontWeight: "600",
     },

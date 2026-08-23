@@ -1,7 +1,8 @@
 const router = require("express").Router();
 const controller = require("../controllers/review.controller");
+const authMiddleware = require("../middleware/auth.middleware")
 
-router.post('/', controller.createReview);//Crear review
-router.get('/movie/:id', controller.getReviewsByMovie);//obtener review por pelicula
+router.post("/", authMiddleware, controller.createReview);
+router.get("/movie/:id", controller.getReviewsByMovie);
 
 module.exports = router;

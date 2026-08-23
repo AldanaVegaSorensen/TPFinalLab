@@ -22,7 +22,7 @@ const ReviewModel = {
       user_id: userId,
       movie_id: movieId,
       rating,
-      comment,
+      comment: comment || "",
       created_at: new Date().toISOString(),
     };
 

@@ -5,6 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import CircularSlider from "@/src/components/circularSlider";
 import { router } from "expo-router";
+import { COLORS } from '@/src/constants/colors';
 
 
 export default function Home() {
@@ -96,7 +97,7 @@ export default function Home() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#414141',
+    backgroundColor: COLORS.background,
   },
   header: {
     flexDirection: "row",
@@ -104,10 +105,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     marginHorizontal: 10,
     marginVertical: 10
-  },
-  titleContainer: {
-    flexDirection: 'row',
-    gap: 8,
   },
   logo: {
     width: 45,

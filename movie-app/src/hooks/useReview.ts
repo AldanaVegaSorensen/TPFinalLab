@@ -6,39 +6,53 @@ export type Review = {
   movieId: number;
   rating: number;
   comment: string;
-  createdAt: string;
+  created_at: string;
   user: {
-    id: number;
     name: string;
   };
 };
 
-export function useReview(movieId: number) {
+export function useReviews(movieId: number) {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const loadReviews = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const response = await reviewService.getByMovie(movieId);
+
+      setReviews(response.data);
+    } catch (error) {
+      console.error("Error cargando reviews:", error);
+      setError("No se pudieron cargar las reviews");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const createReview = async (
+    data: {
+      movieId: number;
+      rating: number;
+      comment: string;
+    }
+  ) => {
+    try {
+      const response = await reviewService.create(data);
+
+      await loadReviews();
+
+      return response.data;
+    } catch (error) {
+      console.error("Error creando review:", error);
+      throw error;
+    }
+  };
+
   useEffect(() => {
-    const loadReviews = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-
-        const response =
-          await reviewService.getByMovie(movieId);
-
-        setReviews(response.data);
-      } catch (err) {
-        console.error(
-          "Error cargando reviews:",
-          err
-        );
-        setError("No se pudieron cargar las reviews");
-      } finally {
-        setLoading(false);
-      }
-    };
-
     loadReviews();
   }, [movieId]);
 
@@ -46,5 +60,7 @@ export function useReview(movieId: number) {
     reviews,
     loading,
     error,
+    createReview,
+    reloadReviews: loadReviews,
   };
 }

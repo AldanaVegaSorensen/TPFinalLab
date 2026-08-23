@@ -4,6 +4,8 @@ import {
   Text,
   StyleSheet,
 } from "react-native";
+import { COLORS } from '@/src/constants/colors';
+
 
 type Review = {
   id: number;
@@ -75,7 +77,7 @@ const styles = StyleSheet.create({
   },
 
   review: {
-    backgroundColor: "#4a4a4a",
+    backgroundColor: COLORS.surface,
     borderRadius: 12,
     padding: 15,
     marginBottom: 10,
@@ -99,23 +101,23 @@ const styles = StyleSheet.create({
   },
 
   star: {
-    color: "#FFD700",
+    color: COLORS.accent,
     fontSize: 16,
   },
 
   ratingText: {
-    color: "white",
+    color: COLORS.text,
     fontWeight: "600",
   },
 
   comment: {
-    color: "#ddd",
+    color: COLORS.text,
     marginTop: 8,
     lineHeight: 20,
   },
 
   date: {
-    color: "#a3a3a3",
+    color: COLORS.textSecondary,
     fontSize: 11,
     marginTop: 8,
   },

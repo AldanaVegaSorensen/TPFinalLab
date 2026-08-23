@@ -42,6 +42,8 @@ async function register(name, email, password) {
     { expiresIn: '7d' }
   );
 
+  await HistoryService.createHistory(user.id);
+
   return { token, user };
 }
 

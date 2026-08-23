@@ -1,0 +1,95 @@
+[
+  {
+    "user_id": 1,
+    "movies": [
+      {
+        "movie_id": 603,
+        "watched_at": "2026-08-20T00:00:00.000Z"
+      },
+      {
+        "movie_id": 550,
+        "watched_at": "2026-08-15T00:00:00.000Z"
+      },
+      {
+        "movie_id": 680,
+        "watched_at": "2026-08-10T00:00:00.000Z"
+      }
+    ]
+  },
+  {
+    "user_id": 2,
+    "movies": [
+      {
+        "movie_id": 278,
+        "watched_at": "2026-08-21T00:00:00.000Z"
+      },
+      {
+        "movie_id": 238,
+        "watched_at": "2026-08-18T00:00:00.000Z"
+      },
+      {
+        "movie_id": 424,
+        "watched_at": "2026-08-05T00:00:00.000Z"
+      }
+    ]
+  },
+  {
+    "user_id": 3,
+    "movies": [
+      {
+        "movie_id": 157336,
+        "watched_at": "2026-08-22T00:00:00.000Z"
+      },
+      {
+        "movie_id": 27205,
+        "watched_at": "2026-08-16T00:00:00.000Z"
+      },
+      {
+        "movie_id": 13,
+        "watched_at": "2026-08-01T00:00:00.000Z"
+      }
+    ]
+  },
+  {
+    "user_id": 4,
+    "movies": [
+      {
+        "movie_id": 155,
+        "watched_at": "2026-08-23T00:00:00.000Z"
+      },
+      {
+        "movie_id": 497,
+        "watched_at": "2026-08-12T00:00:00.000Z"
+      },
+      {
+        "movie_id": 129,
+        "watched_at": "2026-07-28T00:00:00.000Z"
+      }
+    ]
+  },
+  {
+    "user_id": 5,
+    "movies": [
+      {
+        "movie_id": 120,
+        "watched_at": "2026-08-19T00:00:00.000Z"
+      },
+      {
+        "movie_id": 24428,
+        "watched_at": "2026-08-14T00:00:00.000Z"
+      },
+      {
+        "movie_id": 299536,
+        "watched_at": "2026-07-30T00:00:00.000Z"
+      }
+    ]
+  },
+  {
+    "movies": [
+      {
+        "movie_id": 1368337,
+        "watched_at": "2026-08-20T23:23:00.000Z"
+      }
+    ]
+  }
+]
