@@ -1,13 +1,13 @@
 const router = require("express").Router();
 const controller = require("../controllers/list.controller");
+const authMiddleware = require("../middleware/auth.middleware")
 
+router.post('/', authMiddleware, controller.createList);
 
-router.post('/', controller.createList);
+router.get('/', authMiddleware, controller.getUserLists);
 
-router.get('/', controller.getUserLists);
+router.post('/:listId/movies', authMiddleware, controller.addMovie);
 
-router.post('/:listId/movies', controller.addMovie);
-
-router.delete('/:listId/movies/:movieId', controller.removeMovie);
+router.delete('/:listId/movies/:movieId', authMiddleware, controller.removeMovie);
 
 module.exports = router;

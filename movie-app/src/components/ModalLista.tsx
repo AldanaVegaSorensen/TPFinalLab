@@ -39,19 +39,23 @@ export default function ModalAddToList({
   
 
   const handleCreateList = () => {
-    if (!listName.trim()) return;
+      if (!listName.trim()) return;
 
-    onCreateList(listName.trim(), movieId);
+      onCreateList(
+          listName.trim(),
+          movieId
+      );
 
-    setListName("");
-    setShowNewList(false);
-    onClose();
+      setListName("");
+      setShowNewList(false);
   };
 
   const handleAddToList = (listId: number) => {
-    onAddToList(listId, movieId);
-    onClose();
-  };
+    onAddToList(
+        listId,
+        movieId
+    );
+};
 
   return (
     <Modal

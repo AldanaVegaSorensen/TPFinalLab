@@ -3,7 +3,7 @@ const ListService = require('../services/list.service');
 async function createList(req, res) {
   try {
     const { name } = req.body;
-    const userId = req.user.id;
+    const userId = req.user.userId;
     const list = await ListService.createList(userId, name);
 
     res.json(list);
@@ -18,12 +18,22 @@ async function createList(req, res) {
 
 const getUserLists = async (req, res) => {
   try {
-    const userId = req.user.id;
+    console.log("===== GET LISTS =====");
+        console.log("REQ.USER:", req.user);
+
+    const userId = req.user.userId;
+
+     console.log("userId:", userId);
+
     const lists = await ListService.getUserLists(userId);
+     console.log("LISTAS:", lists);
 
     res.json(lists);
 
   } catch (error) {
+
+    console.error("ERROR GET LISTS:", error);
+    
     res.status(500).json({
       message: error.message
     });

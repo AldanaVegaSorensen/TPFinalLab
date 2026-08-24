@@ -14,6 +14,7 @@ import { COLORS } from '@/src/constants/colors';
 import ModalReview from "@/src/components/ModalReview";
 import ModalLista from "@/src/components/ModalLista";
 import { useHistory } from "../../hooks/useHistory";
+import { useLists } from "@/src/hooks/useList";
 
 const {width, height} = Dimensions.get('screen');
 
@@ -28,59 +29,88 @@ export default function MovieDetailScreen() {
 
   const { addMovie: addToHistory} = useHistory();
 
-  const [lists, setLists] = useState([
-  { id: 1, name: "Películas favoritas" },
-  { id: 2, name: "Para ver" },
-  { id: 3, name: "Películas de terror" },
-]);
+  const { lists, createList, addMovieToList} = useLists();
 
     const handleSaveReview = async (
-    fecha: Date,
-    rating: number | null,
-    comment: string
-) => {
+        fecha: Date,
+        rating: number | null,
+        comment: string
+    ) => {
 
-    try {
+        try {
 
-        const movieId = Number(id);
+            const movieId = Number(id);
 
-        if (rating !== null) {
+            if (rating !== null) {
 
-            await createReview(
-                {movieId,
-                rating,
-                comment}
+                await createReview(
+                    {movieId,
+                    rating,
+                    comment}
+                );
+
+                console.log("Review guardada:");
+            }
+
+            await addToHistory(
+                movieId,
+                fecha.toISOString()
             );
 
-            console.log("Review guardada:");
+            await reloadReviews();
+
+            setIsModalVisible(false);
+
+        } catch (error: any) {
+        
         }
+    };
 
-        await addToHistory(
-            movieId,
-            fecha.toISOString()
-        );
+    const handleCreateList = async (
+        name: string,
+        movieId: number
+    ) => {
+        try {
+            const newList = await createList(name);
 
-        await reloadReviews();
+            await addMovieToList(
+                newList.id,
+                movieId
+            );
 
-        setIsModalVisible(false);
+            console.log("Lista creada y película agregada");
 
-    } catch (error: any) {
-    console.error(
-        "STATUS:",
-        error.response?.status
-    );
+            setIsListModalVisible(false);
 
-    console.error(
-        "DATA:",
-        error.response?.data
-    );
+        } catch (error: any) {
+            console.error(
+                "Error creando lista:",
+                error.response?.data
+            );
+        }
+    };
 
-    console.error(
-        "REQUEST:",
-        error.config?.data
-    );
-}
-};
+    const handleAddToList = async (
+        listId: number,
+        movieId: number
+    ) => {
+        try {
+            await addMovieToList(
+                listId,
+                movieId
+            );
+
+            console.log("Película agregada a la lista");
+
+            setIsListModalVisible(false);
+
+        } catch (error: any) {
+            console.error(
+                "Error agregando película:",
+                error.response?.data
+            );
+        }
+    };
     
   if (loading) {
     return (
@@ -201,12 +231,8 @@ export default function MovieDetailScreen() {
             onClose={() => setIsListModalVisible(false)}
             movieId={movie.id}
             lists={lists}
-            onAddToList={(listId, movieId) => {
-                console.log("Agregar película", movieId, "a lista", listId);
-            }}
-            onCreateList={(name, movieId) => {
-                console.log("Crear lista", name, "con película", movieId);
-            }}
+            onAddToList={handleAddToList}
+            onCreateList={handleCreateList}
         />
     </ScrollView>
   );
