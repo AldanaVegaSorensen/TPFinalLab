@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
 import { historyService } from "@/src/services/history.service";
+import { movieService } from "../services/movie.service";
 
 export type HistoryMovie = {
     movie_id: number;
@@ -24,6 +25,8 @@ export function useHistory() {
     const [error, setError] =
         useState<string | null>(null);
 
+    const [movies, setMovies] = useState<any[]>([]);
+
 
     const loadHistory = async () => {
 
@@ -35,7 +38,17 @@ export function useHistory() {
             const response =
                 await historyService.getHistory();
 
+            const history = response.data.movies;
+
+            const movies = await Promise.all(
+                        history.map((item: any) =>
+                            movieService.getMovie(item.movie_id)
+                        )
+                    );
+
+
             setHistory(response.data);
+            setMovies(movies.map((response) => response.data));
 
         } catch (error: any) {
     console.error(
@@ -72,6 +85,7 @@ export function useHistory() {
 
             setHistory(response.data);
 
+
             return response.data;
 
         } catch (error) {
@@ -99,5 +113,6 @@ export function useHistory() {
         error,
         addMovie,
         reloadHistory: loadHistory,
+        movies,
     };
 }

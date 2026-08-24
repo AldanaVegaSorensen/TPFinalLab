@@ -66,7 +66,30 @@ const removeMovie = async (req, res) => {
     const listId = Number(req.params.listId);
     const movieId = Number(req.params.movieId);
 
+    console.log("En el controller de list: ", listId, movieId)
+
     const list = await ListService.removeMovie(listId, movieId);
+
+    console.log("Respuesta del service: ", list)
+    
+    res.json(list);
+
+  } catch (error) {
+    res.status(400).json({
+      message: error.message
+    });
+
+  }
+};
+
+const updateList = async (req, res) => {
+  try {
+
+    const listId = Number(req.params.listId);
+    const { name } = req.body;
+    const userId = req.user.userId;
+
+    const list = await ListService.updateList(listId, userId, name);
 
     res.json(list);
 
@@ -82,5 +105,6 @@ module.exports = {
   createList,
   getUserLists,
   addMovie,
-  removeMovie
+  removeMovie,
+  updateList,
 };

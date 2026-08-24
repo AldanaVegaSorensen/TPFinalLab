@@ -10,4 +10,6 @@ router.post('/:listId/movies', authMiddleware, controller.addMovie);
 
 router.delete('/:listId/movies/:movieId', authMiddleware, controller.removeMovie);
 
+router.put('/:listId', authMiddleware, controller.updateList);
+
 module.exports = router;

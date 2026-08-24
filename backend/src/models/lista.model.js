@@ -71,6 +71,23 @@ const ListModel = {
 
     return list;
   },
+
+  async updateName(listId, name) {
+  const lists = readLists();
+  const list = lists.find((list) => list.id === listId);
+
+  if (!list) {
+    return null;
+  }
+
+  list.name = name;
+
+  writeLists(lists);
+
+  return list;
+},
+
+  
 };
 
 module.exports = ListModel;

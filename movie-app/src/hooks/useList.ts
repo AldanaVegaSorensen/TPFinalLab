@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { listService } from "@/src/services/list.service";
+import { movieService } from "../services/movie.service";
 
 export type MovieList = {
     id: number;
@@ -22,7 +23,7 @@ export function useLists() {
             setError(null);
 
             const response = await listService.getLists();
-
+console.log("Listas a cargar: ",response.data)
             setLists(response.data);
 
         } catch (error) {
@@ -72,6 +73,57 @@ export function useLists() {
         return response.data;
     };
 
+    const updateList = async (
+  listId: number,
+  name: string
+) => {
+  try {
+    console.log("Datos a enviar: ",listId, name)
+    const response = await listService.update(
+      listId,
+      name
+    );
+
+    
+
+    await loadLists();
+
+    return response.data;
+  } catch (error) {
+    console.error(
+      "Error actualizando lista:",
+      error
+    );
+
+    throw error;
+  }
+};
+
+const removeMovieFromList = async (
+  listId: number,
+  movieId: number
+) => {
+  try {
+    const response = await listService.removeMovie(
+      listId,
+      movieId
+    );
+
+    console.log("Respuesta de eliminar pelicula de lista: ",response)
+    await loadLists();
+
+    return response.data;
+  } catch (error) {
+    console.error(
+      "Error eliminando película de la lista:",
+      error
+    );
+
+    throw error;
+  }
+};
+
+
 
     useEffect(() => {
         loadLists();
@@ -84,6 +136,8 @@ export function useLists() {
         error,
         createList,
         addMovieToList,
-        reloadLists: loadLists
+        reloadLists: loadLists,
+        updateList,
+        removeMovieFromList
     };
 }

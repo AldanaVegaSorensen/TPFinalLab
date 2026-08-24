@@ -36,6 +36,7 @@ const UserModel = {
     const users = readUsers();
     return users.find( (user) => Number(user.id) === Number(id) )
   }
+
 };
 
 module.exports = UserModel;

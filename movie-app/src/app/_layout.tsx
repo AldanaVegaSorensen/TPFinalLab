@@ -39,6 +39,9 @@ function RootNavigator() {
           headerShown: false,
         }}
       />
+
+      <Stack.Screen name="lists" options={{ headerShown: false }} />
+
     </Stack>
 
     
