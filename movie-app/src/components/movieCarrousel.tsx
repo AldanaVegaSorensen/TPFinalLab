@@ -1,18 +1,15 @@
 import { View, Text, FlatList, StyleSheet } from "react-native";
 import MovieCard from "@/src/components/movieCard";
 import { Movie } from "@/src/types/movie";
-import MovieCardLarge from "./movieCarLarge";
 
 type Props = {
   title: string;
   movies: Movie[];
-  variant?: "default" | "large";
 };
 
 export default function MovieCarousel({
   title,
   movies,
-  variant = "default"
 }: Props) {
   return (
     <View style={[styles.section]}>
@@ -37,9 +34,6 @@ const styles = StyleSheet.create({
     marginBottom: 24,
     marginVertical: 5
   },
-  sectionLarge:{
-    marginBottom: 32,
-  },
   sectionTitle: {
     fontSize: 20,
     marginBottom:3,
@@ -49,8 +43,5 @@ const styles = StyleSheet.create({
 
   listContent: {
     paddingHorizontal: 16,
-  },
-  listContentLarge: {
-    paddingHorizontal: 5,
   },
 });

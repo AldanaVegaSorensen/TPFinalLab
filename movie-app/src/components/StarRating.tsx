@@ -1,5 +1,4 @@
 import { Ionicons, } from "@expo/vector-icons";
-import { useState } from "react";
 import { View, Pressable } from "react-native";
 
 interface StarRatingProps {

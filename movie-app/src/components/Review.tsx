@@ -3,25 +3,39 @@ import {
   View,
   Text,
   StyleSheet,
+  TouchableOpacity,
+  Pressable,
 } from "react-native";
 import { COLORS } from '@/src/constants/colors';
+import { jwtDecode } from "jwt-decode";
+import { useSession } from "../context/AuthContext";
+import type { Review } from "../hooks/useReview";
 
+interface ReviewsProps {
+    reviews: Review[];
+    onEdit: (review: Review) => void;
+    onDelete: (reviewId: number) => void;
+}
 
-type Review = {
-  id: number;
-  rating: number;
-  comment: string;
-  created_at: string;
-  user: {
-    name: string;
-  };
-};
+interface TokenPayload {
+    userId: number;
+}
 
-type Props = {
-  reviews: Review[];
-};
+export default function Reviews({
+    reviews,
+    onEdit,
+    onDelete
+}: ReviewsProps) {
+  const { session } = useSession();
+  let currentUserId: number | null = null;
 
-export default function Reviews({ reviews }: Props) {
+if (session) {
+    const decoded = jwtDecode<TokenPayload>(session);
+    console.log("TOKEN DECODIFICADO:", decoded);
+    currentUserId = decoded.userId;
+    console.log("USER ACTUAL: ",currentUserId)
+}
+console.log(reviews)
   return (
     <View style={styles.container}>
       <Text style={styles.title}>
@@ -56,6 +70,19 @@ export default function Reviews({ reviews }: Props) {
               review.created_at
             ).toLocaleDateString("es-AR")}
           </Text>
+
+          {review.user_id === currentUserId && (
+              <View>
+                  <Pressable onPress={() => onEdit(review)}>
+                      <Text style={{color:'white'}}>Editar</Text>
+                  </Pressable>
+
+                  <Pressable onPress={() => onDelete(review.id)}>
+                      <Text>Eliminar</Text>
+                  </Pressable>
+              </View>
+          )}
+          
         </View>
       ))}
     </View>

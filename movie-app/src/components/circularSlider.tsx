@@ -1,9 +1,9 @@
 import { View, Text, StyleSheet, Dimensions } from 'react-native'
 import { Movie } from '../types/movie';
-import MovieCardLarge from './movieCarLarge';
 import { Carousel } from "react-native-reanimated-carousel";
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { COLORS } from '@/src/constants/colors';
+import MovieCard from './movieCard';
 
 
 const { width, height } = Dimensions.get("screen")
@@ -18,8 +18,7 @@ type Props = {
 
 export default function CircularSlider( {title, movies}: Props){
   return(
-      <GestureHandlerRootView>
-        <View style={styles.container}>
+      <View style={styles.container}>
           <Text style={styles.sectionTitle}>
             {title}
           </Text>
@@ -33,7 +32,7 @@ export default function CircularSlider( {title, movies}: Props){
             loop
             renderItem={({ item }) => (
               <View style={styles.slide}>
-                <MovieCardLarge
+                <MovieCard
                   movie={item}
                   width={ITEM_SIZE-20}
                   height={CAROUSEL_HEIGHT}
@@ -42,7 +41,6 @@ export default function CircularSlider( {title, movies}: Props){
             )}
           />
         </View>
-      </GestureHandlerRootView>
         
     )
 }

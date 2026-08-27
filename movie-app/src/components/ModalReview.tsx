@@ -2,8 +2,9 @@ import { Modal, View, Pressable , Text, TextInput, StyleSheet, StatusBar} from "
 import { Ionicons } from "@expo/vector-icons"; 
 import { StarRating } from "./StarRating";
 import { Fecha } from "./Fecha";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { COLORS } from "../constants/colors";
+import { Review } from "../types/review";
 
 
 interface ModalReviewProps {
@@ -14,12 +15,14 @@ interface ModalReviewProps {
         rating: number,
         comment: string
     ) => void;
+    review?: Review | null;
 }
 
 export default function ModalReview({
   visible,
   onClose,
   onSave,
+  review
 }: ModalReviewProps) {
     const [fecha, setFecha] = useState<Date>(new Date());
     const [rating, setRating] = useState<number>(0);
@@ -28,7 +31,18 @@ export default function ModalReview({
     const handleSave = () => {
         onSave(fecha, rating, comment);
     };
-
+    
+    useEffect(() => {
+    if (visible) {
+        if (review) {
+            setRating(review.rating);
+            setComment(review.comment);
+        } else {
+            setRating(0);
+            setComment("");
+        }
+    }
+}, [visible, review]);
     
     return(
         <Modal
@@ -68,7 +82,7 @@ export default function ModalReview({
 
                 <View style={styles.content}>
                     <Text style={styles.label}>Comentario</Text>
-                    <TextInput style={styles.textInput} placeholder="Haz un comentario..." multiline textAlignVertical="top" onChangeText={setComment}></TextInput>
+                    <TextInput style={styles.textInput} placeholder="Haz un comentario..." multiline textAlignVertical="top" onChangeText={setComment} value={comment}></TextInput>
                 </View>
                 
                 <Pressable

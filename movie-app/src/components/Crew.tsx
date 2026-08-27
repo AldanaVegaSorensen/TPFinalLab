@@ -1,13 +1,19 @@
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from "react-native";
+import {
+  View,
+  Text,
+  ScrollView,
+  StyleSheet,
+} from "react-native";
+
 import { CrewMember } from "../types/movie";
+import PersonCard from "./PersonCard";
 
-
-type Props = {
+type CrewProps = {
   crew?: CrewMember[];
 };
 
-export default function Crew({crew}:Props){
-    const mainCrew = crew?.filter(
+export default function Crew({ crew }: CrewProps) {
+  const mainCrew = crew?.filter(
     (person) =>
       person.job === "Director" ||
       person.department === "Writing" ||
@@ -15,76 +21,47 @@ export default function Crew({crew}:Props){
       person.job === "Executive Producer"
   );
 
-    return (
-        <View style={{marginVertical: 20}}>
-            <Text style={styles.title}>
-                Equipo
-            </Text>
+  if (!mainCrew?.length) {
+    return null;
+  }
 
-            <ScrollView 
-                horizontal 
-                showsHorizontalScrollIndicator={false}
-                contentContainerStyle={{paddingHorizontal: 15}}
-            >
-                {mainCrew?.map((person)=>{
-                    return (
-                        <View
-                            key={`${person.id}-${person.job}`}
-                            style={{marginRight:20, alignItems:'center'}}
-                        >
-                            <Image
-                                style={{
-                                    borderRadius: 16,
-                                    height: 100,
-                                    width: 80,
-                                }}
-                                source={person.profile_path
-                                    ? {
-                                        uri: `https://image.tmdb.org/t/p/w185${person.profile_path}`,
-                                        }
-                                    : require("@/src/assets/images/Person_Placeholder.png")
-                                }
-                            />
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>
+        Equipo
+      </Text>
 
-
-                            <Text style={styles.character}>
-                                {person.job?.length > 12
-                                    ? person.job.slice(0, 12) + "..."
-                                    : person.job}
-                            </Text>
-
-                            <Text style={styles.name}>
-                                {person.name?.length > 12
-                                    ? person.name.slice(0, 12) + "..."
-                                    : person.name}
-                            </Text>
-                        </View>
-                    )}
-                )}
-                
-            </ScrollView>
-        </View>
-    )
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={styles.content}
+      >
+        {mainCrew.map((person) => (
+          <PersonCard
+            key={`${person.id}-${person.job}`}
+            name={person.name}
+            role={person.job}
+            image={person.profile_path}
+          />
+        ))}
+      </ScrollView>
+    </View>
+  );
 }
 
-const styles  = StyleSheet.create({
-    title:{
-        color:"white",
-        fontSize: 18,
-        marginHorizontal: 15,
-        marginBottom: 20, 
-    },
-    character: {
-        color: "white",
-        marginTop: 5,
-        fontSize: 12,
-        textAlign: "center",
-    },
+const styles = StyleSheet.create({
+  container: {
+    marginVertical: 20,
+  },
 
-    name: {
-        color: "#a3a3a3",
-        marginTop: 2,
-        fontSize: 12,
-        textAlign: "center",
-    },
-})
+  title: {
+    color: "white",
+    fontSize: 18,
+    marginHorizontal: 15,
+    marginBottom: 20,
+  },
+
+  content: {
+    paddingHorizontal: 15,
+  },
+});

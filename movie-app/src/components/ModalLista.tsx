@@ -10,11 +10,8 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { COLORS } from "../constants/colors";
+import { MovieList } from "../types/list";
 
-interface MovieList {
-  id: number;
-  name: string;
-}
 
 interface ModalAddToListProps {
   visible: boolean;
