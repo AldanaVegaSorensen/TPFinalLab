@@ -73,26 +73,6 @@ const HistoryModel = {
 
         return userHistory;
     },
-
-    async removeMovie(userId, movieId) {
-        const history = readHistory();
-
-        const userHistory = history.find(
-            item => item.user_id === userId
-        );
-
-        if (!userHistory) {
-            return null;
-        }
-
-        userHistory.movies = userHistory.movies.filter(
-            movie => movie.movie_id !== movieId
-        );
-
-        writeHistory(history);
-
-        return userHistory;
-    }
 };
 
 module.exports = HistoryModel;

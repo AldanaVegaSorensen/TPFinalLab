@@ -37,7 +37,13 @@ const ListModel = {
 
   async findById(id) {
     const lists = readLists();
-    return lists.find((list) => list.id === id);
+
+    const lista = lists.find(
+      (list) => list.id === Number(id)
+    );
+
+
+    return lista;
   },
 
   async addMovie(listId, movieId) {

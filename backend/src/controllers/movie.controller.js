@@ -11,7 +11,7 @@ async function popular(req, res) {
 
         console.error(err);
 
-        res.status(500).json({
+        res.status(404).json({
             error: "No se pudieron obtener las películas."
         });
 
@@ -29,7 +29,7 @@ async function topRated(req, res) {
 
         console.error(err);
 
-        res.status(500).json({
+        res.status(404).json({
             error: "No se pudieron obtener las películas."
         });
 
@@ -47,7 +47,7 @@ async function upcoming(req, res) {
 
         console.error(err);
 
-        res.status(500).json({
+        res.status(404).json({
             error: "No se pudieron obtener las películas."
         });
 
@@ -65,7 +65,7 @@ async function nowPlaying(req, res) {
 
         console.error(err);
 
-        res.status(500).json({
+        res.status(404).json({
             error: "No se pudieron obtener las películas."
         });
 
@@ -76,6 +76,12 @@ async function byGenre(req, res) {
   try {
     const { genreId } = req.params;
 
+    if (!Number.isInteger(genreId) || genreId <= 0) {
+        const error = new Error("El ID de género no es válido");
+        error.statusCode = 422;
+        throw error;
+    }
+
     const movies =
       await movieService.getMoviesByGenre(genreId);
 
@@ -84,7 +90,7 @@ async function byGenre(req, res) {
   } catch (err) {
     console.error(err);
 
-    res.status(500).json({
+    res.status(404).json({
       error: "No se pudieron obtener las películas.",
     });
   }
@@ -94,44 +100,60 @@ async function byId(req, res) {
   try {
     const { id } = req.params;
 
-    //console.log("ID recibido:",id)
+    if (!Number.isInteger(id) || id <= 0) {
+        return res.status(400).json({
+            message: "El ID debe ser válido"
+        });
+    }
+
 
     const movie = await movieService.getMovieById(id);
 
-    //console.log("2. Movie obtenida:", movie);
-
     res.json(movie);
 
-    //console.log("3. Respuesta enviada");
-
   } catch (err) {
-    //console.log("4. Entró al catch");
-    //console.error("ERROR:", err);
-
-    res.status(500).json({
+    res.status(404).json({
       error: "No se pudo obtener la película.",
     });
   }
 }
 
-async function getMovies(req, res){
+async function getMovies(req, res) {
     try {
-        console.log("Dentro del controller de movies obteniendo todas las peliculas: ")
-        const page = Number(req.query.page) || 1;
-        console.log("PAGINAS: ",page)
+        if (
+            req.query.cantidad !== undefined &&
+            (!Number.isInteger(cantidad) || cantidad <= 0)
+        ) {
+            return res.status(400).json({
+                message: "cantidad debe ser un número entero mayor a 0"
+            });
+        }
 
-        const movies = await movieService.getMovies(page);
-        console.log("Peliculas de la pagina ",page,": ",movies)
+        if (
+            req.query.from !== undefined &&
+            (!Number.isInteger(from) || from < 0)
+        ) {
+            return res.status(400).json({
+                message: "from debe ser un número entero mayor o igual a 0"
+            });
+        }
+
+        const cantidad = Number(req.query.cantidad) || 10;
+        const from = Number(req.query.from) || 0;
+
+
+        const movies = await movieService.getMovies(cantidad, from);
 
         res.json(movies);
+
     } catch (error) {
         console.error("Error obteniendo películas:", error);
 
-        res.status(500).json({
+        res.status(404).json({
             message: "Error al obtener las películas",
         });
     }
-};
+}
 
 
 async function searchMovies(req, res) {
@@ -154,7 +176,7 @@ async function searchMovies(req, res) {
     } catch (error) {
         console.error("Error buscando películas:", error);
 
-        res.status(500).json({
+        res.status(404).json({
             message: "Error al buscar películas",
         });
     }

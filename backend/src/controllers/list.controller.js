@@ -4,9 +4,16 @@ async function createList(req, res) {
   try {
     const { name } = req.body;
     const userId = req.user.userId;
+
+    if (!name || name.trim().length === 0) {
+     const error = new Error('El nombre de la lista es obligatorio');
+                error.statusCode = 422;
+                throw error;
+    }
+
     const list = await ListService.createList(userId, name);
 
-    res.json(list);
+    res.status(201).json(list);
 
   } catch (error) {
     res.status(400).json({
@@ -16,40 +23,45 @@ async function createList(req, res) {
   }
 };
 
-const getUserLists = async (req, res) => {
+async function getUserLists(req, res){
   try {
-    console.log("===== GET LISTS =====");
-        console.log("REQ.USER:", req.user);
 
     const userId = req.user.userId;
 
-     console.log("userId:", userId);
-
     const lists = await ListService.getUserLists(userId);
-     console.log("LISTAS:", lists);
 
-    res.json(lists);
+    res.status(200).json(lists);
 
   } catch (error) {
-
-    console.error("ERROR GET LISTS:", error);
     
-    res.status(500).json({
+    res.status(404).json({
       message: error.message
     });
 
   }
 };
 
-const addMovie = async (req, res) => {
+async function addMovie(req, res){
   try {
 
     const listId = Number(req.params.listId);
     const { movieId } = req.body;
 
+    if (!Number.isInteger(movieId) || movieId <= 0) {
+        const error = new Error("El ID de película no es válido");
+        error.statusCode = 422;
+        throw error;
+    }
+
+    if (!Number.isInteger(listId) || listId <= 0) {
+        const error = new Error("El ID de la lista no es válido");
+        error.statusCode = 422;
+        throw error;
+    }
+
     const list = await ListService.addMovie(listId, movieId);
 
-    res.json(list);
+    res.status(200).json(lists);
 
   } catch (error) {
 
@@ -60,18 +72,27 @@ const addMovie = async (req, res) => {
   }
 };
 
-const removeMovie = async (req, res) => {
+async function removeMovie(req, res) {
   try {
 
     const listId = Number(req.params.listId);
     const movieId = Number(req.params.movieId);
 
-    console.log("En el controller de list: ", listId, movieId)
+    if (!Number.isInteger(movieId) || movieId <= 0) {
+        const error = new Error("El ID de película no es válido");
+        error.statusCode = 422;
+        throw error;
+    }
+
+    if (!Number.isInteger(listId) || listId <= 0) {
+        const error = new Error("El ID de la lista no es válido");
+        error.statusCode = 422;
+        throw error;
+    }
+
 
     const list = await ListService.removeMovie(listId, movieId);
 
-    console.log("Respuesta del service: ", list)
-    
     res.json(list);
 
   } catch (error) {
@@ -82,19 +103,50 @@ const removeMovie = async (req, res) => {
   }
 };
 
-const updateList = async (req, res) => {
+async function updateList(req, res){
   try {
 
     const listId = Number(req.params.listId);
     const { name } = req.body;
     const userId = req.user.userId;
 
+    if (!name || name.trim().length === 0) {
+      const error = new Error(
+                'El nombre de la lista es obligatorio',
+            );
+            error.statusCode = 404;
+            throw error;
+    }
+
+    if (!Number.isInteger(listId) || listId <= 0) {
+        const error = new Error("El ID de la lista no es válido");
+        error.statusCode = 422;
+        throw error;
+    }
+
     const list = await ListService.updateList(listId, userId, name);
 
-    res.json(list);
+    res.status(200).json(lists);
 
   } catch (error) {
     res.status(400).json({
+      message: error.message
+    });
+  }
+};
+
+async function getById(req, res){
+  try {
+    const { id } = req.params;
+
+
+    const lists = await ListService.getById(id);
+
+    res.json(lists);
+
+  } catch (error) {
+    
+    res.status(404).json({
       message: error.message
     });
 
@@ -107,4 +159,5 @@ module.exports = {
   addMovie,
   removeMovie,
   updateList,
+  getById
 };

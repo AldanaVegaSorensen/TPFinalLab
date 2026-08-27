@@ -2,29 +2,9 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const UserModel = require('../models/user.model');
 const CustomError = require('../errors/CustomError');
+const HistoryService = require('./history.service');
 
 async function register(name, email, password) {
-  // Validar nombre
-  if (!name || name.trim().length < 2) {
-    const error = new CustomError("El nombre debe tener al menos 2 caracteres.", 422)
-    throw error
-  }
-
-  // Validar email
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-  if (!emailRegex.test(email)) {
-    const error = new CustomError("El email no es válido.", 422)
-    throw error
-  }
-
-  // Validar contraseña
-  if (password.length < 8 || !/[A-Z]/.test(password) || !/[a-z]/.test(password) ||!/[0-9]/.test(password)) {
-    const error = new CustomError("La contraseña debe tener al menos 8 caracteres, una letra mayúscula, una letra minúscula y un número .", 422)
-    throw error
-  }
-
-  // Verificar email existente
   const existing = await UserModel.findByEmail(email);
 
   if (existing) {
@@ -50,16 +30,16 @@ async function register(name, email, password) {
 
 async function login(email, password) {
     const user = await UserModel.findByEmail(email);
-    console.log(user)
+
     if (!user) {
-      const error = new CustomError("Credenciales inválidas.", 400)
+      const error = new CustomError("Credenciales inválidas.", 401)
       throw error
     }
 
     const isValid = await bcrypt.compare(password, user.password_hash);
 
     if (!isValid) {
-        const error = new CustomError("Credenciales inválidas.", 400)
+        const error = new CustomError("Credenciales inválidas.", 401)
       throw error
     }
 

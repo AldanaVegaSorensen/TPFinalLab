@@ -22,7 +22,7 @@ const ReviewModel = {
       user_id: userId,
       movie_id: movieId,
       rating,
-      comment: comment || "",
+      comment: comment,
       created_at: new Date().toISOString(),
     };
 
@@ -33,7 +33,6 @@ const ReviewModel = {
   },
 
   async findByMovie(movieId) {
-    console.log("Dentro del model");
 
     const reviewsData = readReviews();
 
@@ -55,13 +54,57 @@ const ReviewModel = {
         })
     );
 
-    console.log("Reseñas con usuarios:", reviewsWithUsers);
-
     return reviewsWithUsers.sort(
         (a, b) =>
             new Date(b.created_at) - new Date(a.created_at)
     );
   },
+
+  async update(id, data) {
+    const reviews = readReviews();
+
+    const review = reviews.find(
+      (review) => review.id === id
+    );
+    if(!review){
+      return null
+    }
+
+    review.rating=data.rating;
+    review.comment=data.comment;
+
+
+    writeReviews(reviews)
+
+    return review;
+  },
+
+  async delete(id) {
+  const reviews = readReviews();
+
+  const index = reviews.findIndex(
+    review => review.id === id
+  );
+
+  if (index === -1) {
+    return null;
+  }
+
+  const deletedReview = reviews[index];
+
+  reviews.splice(index, 1);
+
+  writeReviews(reviews);
+
+  return deletedReview;
+},
+async findById(id) {
+    const reviews = readReviews()
+
+    return reviews.find(review => review.id === Number(id));
+}
 };
+
+
 
 module.exports = ReviewModel;

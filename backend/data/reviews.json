@@ -62,13 +62,5 @@
     "rating": 6,
     "comment": "Divertida",
     "created_at": "2026-08-24T00:55:44.249Z"
-  },
-  {
-    "id": 9,
-    "user_id": 4,
-    "movie_id": 969681,
-    "rating": 9,
-    "comment": "",
-    "created_at": "2026-08-24T00:57:05.888Z"
   }
 ]

@@ -15,11 +15,11 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.use('/auth', authRoutes);
-app.use("/movies", movieRoutes);
-app.use('/reviews', reviewRoutes);
-app.use('/lists', listRoutes);
-app.use("/history", historyRoutes);
+app.use('/api/auth', authRoutes);
+app.use("/api/movies", movieRoutes);
+app.use('/api/reviews', reviewRoutes);
+app.use('/api/lists', listRoutes);
+app.use("/api/history", historyRoutes);
 
 
 const PORT = process.env.PORT || 3000;

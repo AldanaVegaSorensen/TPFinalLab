@@ -52,7 +52,11 @@ async function getMovieById(id) {
   return data;
 }
 
-async function getMovies(page = 1) {
+
+async function getMovies(cantidad = 10, from = 0) {
+
+    const page = Math.floor(from / 20) + 1;
+
     const response = await api.get("/discover/movie", {
         params: {
             page,
@@ -61,8 +65,17 @@ async function getMovies(page = 1) {
         },
     });
 
-    return response.data;
-};
+    const movies = response.data.results;
+
+    const start = from % 20;
+
+    return {
+        results: movies.slice(start, start + cantidad),
+        total_results: response.data.total_results,
+        cantidad,
+        from
+    };
+}
 
 async function searchMovies(query, page = 1){
     const response = await tmdb.get("/search/movie", {
