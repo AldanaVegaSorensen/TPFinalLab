@@ -1,9 +1,9 @@
-export interface HistoryMovie {
+export type HistoryMovie = {
     movie_id: number;
     watched_at: string;
 }
 
-export interface History {
+export type History = {
     user_id: number;
     movies: HistoryMovie[];
 }
