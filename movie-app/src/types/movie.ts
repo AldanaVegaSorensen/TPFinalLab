@@ -1,24 +1,28 @@
 export type Movie = {
   id: number;
   title: string;
-  poster_path: string;
-  backdrop_path: string;
+  poster_path: string | null;
+  backdrop_path: string | null;
   overview: string;
   vote_average: number;
   release_date: string;
 };
 
+export type Genre = {
+  id: number;
+  name: string;
+};
+
+export type Credits = {
+  cast: CastMember[];
+  crew: CrewMember[];
+};
+
 export type MovieDetails = Movie & {
   runtime: number;
-  genres: {
-    id: number;
-    name: string;
-  }[];
+  genres: Genre[];
   origin_country: string[];
-  credits: {
-    cast: CastMember[];
-    crew: CrewMember[];
-  };
+  credits: Credits;
 };
 
 export type CastMember = {
@@ -36,3 +40,9 @@ export type CrewMember = {
   department: string;
   profile_path: string | null;
 };
+
+export type MovieCategory =
+  | "popular"
+  | "top_rated"
+  | "upcoming"
+  | "now_playing";

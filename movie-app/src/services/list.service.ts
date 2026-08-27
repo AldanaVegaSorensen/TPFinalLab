@@ -1,29 +1,15 @@
 import api from "./api";
 
 export const listService = {
+    create: (name: string) => api.post("/lists", {name}),
 
-    getLists: () => {
-        return api.get("/lists");
-    },
+    getLists: () => api.get("/lists"),    
 
-    create: (name: string) => {
-        return api.post("/lists", {name});
-    },
+    addMovie: (listId: number, movieId: number) => api.post(`/lists/${listId}/movies`,{movieId}),
 
-    addMovie: (listId: number, movieId: number) => {
-        return api.post(`/lists/${listId}/movies`,{movieId});
-    },
+    getById: (listId: number) => api.get(`/lists/${listId}`),
 
-    getById: (listId: number) => {
-        return api.get(`/lists/${listId}`);
-    },
+    update: (listId: number, name: string) => api.put(`/lists/${listId}`, {name,}),
 
-    update: (listId: number, name: string) =>
-    api.put(`/lists/${listId}`, {
-        name,
-    }),
-
-    removeMovie: (listId: number, movieId: number) =>{
-        return api.delete(`/lists/${listId}/movies/${movieId}`);
-    },
+    removeMovie: (listId: number, movieId: number) => api.delete(`/lists/${listId}/movies/${movieId}`),
 };
