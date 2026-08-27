@@ -36,6 +36,24 @@ const HistoryService = {
             watchedAt
         );
     },
+
+    async updateMovie(userId, movieId, watchedAt) {
+        const history = await HistoryModel.updateMovie(
+            userId,
+            movieId,
+            watchedAt
+        );
+
+        if (!history) {
+            throw new CustomError(
+                "La película no se encuentra en el historial.",
+                404
+            );
+        }
+
+        return history;
+    },
+
 };
 
 module.exports = HistoryService;

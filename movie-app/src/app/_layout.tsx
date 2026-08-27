@@ -3,15 +3,17 @@ import { SessionProvider, useSession } from '@/src/context/AuthContext';
 import { SplashScreenController } from '@/src/splash';
 import { useEffect } from "react";
 import * as NavigationBar from "expo-navigation-bar";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export default function Root() {
   // Set up the auth context and render your layout inside of it.
   return (
+    <GestureHandlerRootView style={{ flex: 1 }}>
       <SessionProvider>
         <SplashScreenController />
         <RootNavigator />
       </SessionProvider>
-    
+    </GestureHandlerRootView>
   );
 }
 

@@ -16,6 +16,7 @@ export const movieService = {
 
   async getMovie(id: number) {
     const { data } = await api.get(`/movies/${id}`);
+    console.log("Peliculas obtenidas con get movie:", data)
     return data;
   },
 

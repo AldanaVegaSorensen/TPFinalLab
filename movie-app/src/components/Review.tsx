@@ -9,7 +9,7 @@ import {
 import { COLORS } from '@/src/constants/colors';
 import { jwtDecode } from "jwt-decode";
 import { useSession } from "../context/AuthContext";
-import type { Review } from "../hooks/useReview";
+import { Review } from "../types/review";
 
 interface ReviewsProps {
     reviews: Review[];
@@ -26,15 +26,7 @@ export default function Reviews({
     onEdit,
     onDelete
 }: ReviewsProps) {
-  const { session } = useSession();
-  let currentUserId: number | null = null;
-
-if (session) {
-    const decoded = jwtDecode<TokenPayload>(session);
-    console.log("TOKEN DECODIFICADO:", decoded);
-    currentUserId = decoded.userId;
-    console.log("USER ACTUAL: ",currentUserId)
-}
+  const { user } = useSession();
 console.log(reviews)
   return (
     <View style={styles.container}>
@@ -71,7 +63,7 @@ console.log(reviews)
             ).toLocaleDateString("es-AR")}
           </Text>
 
-          {review.user_id === currentUserId && (
+          {review.user.id === user?.id && (
               <View>
                   <Pressable onPress={() => onEdit(review)}>
                       <Text style={{color:'white'}}>Editar</Text>

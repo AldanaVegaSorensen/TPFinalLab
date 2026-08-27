@@ -88,8 +88,6 @@ console.log("EN LA SCREEN DE LISTAS")
                                     pathname: "/lists/list/[id]",
                                     params: {
                                         id: item.id.toString(),
-                                        movies: JSON.stringify(item.movies),
-                                        name: item.name
                                     },
                                 })
                             }

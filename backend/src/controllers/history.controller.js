@@ -10,7 +10,6 @@ async function getHistory(req, res, next) {
 
         } catch (error) {
             console.error("Error obteniendo historial:", error);
-            next(error);
         }
     };
 
@@ -57,8 +56,49 @@ async function getHistory(req, res, next) {
                 "Error agregando película al historial:",
                 error
             );
-            next(error);
         }
     }
 
-module.exports = {getHistory, addMovie};
+    async function updateMovie(req, res, next) {
+    try {
+        const userId = req.user.userId;
+        const movieId = Number(req.params.movieId);
+        const { watchedAt } = req.body;
+
+        if (!Number.isInteger(movieId) || movieId <= 0) {
+            const error = new Error(
+                "El ID de la película debe ser un número entero mayor que 0."
+            );
+            error.statusCode = 422;
+            throw error;
+        }
+
+        if (
+            typeof watchedAt !== "string" ||
+            isNaN(Date.parse(watchedAt))
+        ) {
+            const error = new Error(
+                "La fecha de visualización no es válida."
+            );
+            error.statusCode = 422;
+            throw error;
+        }
+
+        const history = await HistoryService.updateMovie(
+            userId,
+            movieId,
+            watchedAt
+        );
+
+        res.status(200).json(history);
+
+    } catch (error) {
+        console.error(
+            "Error actualizando historial:",
+            error
+        );
+    }
+}
+
+
+module.exports = {getHistory, addMovie, updateMovie};

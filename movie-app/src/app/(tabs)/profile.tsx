@@ -1,126 +1,156 @@
-import { View, Text, Pressable, StyleSheet,Image, ActivityIndicator, ScrollView} from "react-native";
+import {
+  View,
+  Text,
+  Pressable,
+  StyleSheet,
+  Image,
+  ActivityIndicator,
+} from "react-native";
+
 import { useSession } from "@/src/context/AuthContext";
 import { useHistory } from "@/src/hooks/useHistory";
-import { useLists } from "@/src/hooks/useList";
 import MovieCarousel from "@/src/components/movieCarrousel";
+
 import { useFocusEffect } from "@react-navigation/native";
 import { useCallback } from "react";
-import { Ionicons } from "@expo/vector-icons";
-import { COLORS } from "@/src/constants/colors";
 import { router } from "expo-router";
 
+interface TokenPayload {
+    userId: number;
+}
 export default function Profile() {
-  const { signOut } = useSession();
+  const { signOut, user } = useSession();
 
-  const {  movies, loading, reloadHistory, } = useHistory();
-  const { lists, loading: listsLoading, } = useLists();
+  const { movies, loading, error, reloadHistory, } = useHistory();
+
 
   useFocusEffect(
     useCallback(() => {
-      reloadHistory();
+        reloadHistory();
     }, [reloadHistory])
-  );
+);
 
+  if (loading) {
+    return (
+      <View style={styles.container}>
+        <ActivityIndicator size="large" color="white" />
+      </View>
+    );
+  }
+
+  if (error) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.errorText}>
+          {error}
+        </Text>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
 
-      {/*PERFIL */}
+      {/* PERFIL */}
       <View style={styles.containerProfile}>
-        <Image source={require("@/src/assets/images/Person_Placeholder.png")} style={styles.profilePic}/>
+        <Image
+          source={require("@/src/assets/images/Person_Placeholder.png")}
+          style={styles.profilePic}
+        />
 
-        <Text style={styles.texto}> Nombre de usuario </Text>
+        <Text style={styles.texto}>
+          {user?.name ?? "Usuario"}
+        </Text>
       </View>
 
-      {/*HISTORIAL*/}
-      <MovieCarousel
+      {/* HISTORIAL */}
+      <View style={styles.historyContainer}>
+        <MovieCarousel
           title="Películas vistas"
           movies={movies}
-      />
+        />
+      </View>
 
-      <View style={styles.divider}/>
+      <View style={styles.divider} />
 
-      {/*LISTAS*/}
+      {/* LISTAS */}
       <Pressable
-        onPress={() => router.push('/lists')}
-        style={{
-          backgroundColor: "#BA90B9",
-          paddingHorizontal: 24,
-          paddingVertical: 12,
-          borderRadius: 8,
-        }}
+        onPress={() => router.push("/lists")}
+        style={styles.button}
       >
-        <Text style={{ color: "#fff", fontWeight: "bold" }}>
+        <Text style={styles.buttonText}>
           Mis listas
         </Text>
       </Pressable>
 
+      {/* CERRAR SESIÓN */}
       <Pressable
         onPress={signOut}
-        style={{
-          backgroundColor: "#BA90B9",
-          paddingHorizontal: 24,
-          paddingVertical: 12,
-          borderRadius: 8,
-        }}
+        style={styles.button}
       >
-        <Text style={{ color: "#fff", fontWeight: "bold" }}>
+        <Text style={styles.buttonText}>
           Cerrar sesión
         </Text>
       </Pressable>
+
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container:{
-      flex: 1,
-      backgroundColor: "#000",
-      alignItems: "center",
-      justifyContent: "center",
+  container: {
+    flex: 1,
+    backgroundColor: "#000",
+    alignItems: "center",
+    justifyContent: "center",
   },
-  containerProfile:{
+
+  containerProfile: {
     alignItems: "center",
     marginBottom: 30,
   },
-  texto:{
-    color: "#fff",
-    fontSize: 24,
-    marginBottom: 24,
-  },
-  profilePic:{
+
+  profilePic: {
     width: 110,
     height: 110,
     borderRadius: 55,
     marginBottom: 12,
   },
-  section:{
 
-  },
-  sectionHeader:{
-
+  texto: {
+    color: "#fff",
+    fontSize: 24,
     marginBottom: 24,
-    marginVertical: 5
   },
-  sectionTitle: {
-    fontSize: 20,
-    marginBottom:3,
-    color: "white",
-    marginLeft:10
-  },
-  listCard:{
 
+  historyContainer: {
+    width: "100%",
   },
-  listName:{
 
-  },
-  listDescription:{
-
-  },
   divider: {
-        height: 1,
-        backgroundColor: "white",
-        width: "100%",
-        marginVertical: 10,
-    },
-})
+    height: 1,
+    backgroundColor: "white",
+    width: "100%",
+    marginVertical: 20,
+  },
+
+  button: {
+    backgroundColor: "#BA90B9",
+    paddingHorizontal: 24,
+    paddingVertical: 12,
+    borderRadius: 8,
+    marginVertical: 6,
+  },
+
+  buttonText: {
+    color: "#fff",
+    fontWeight: "bold",
+  },
+
+  errorText: {
+    color: "white",
+    fontSize: 16,
+    textAlign: "center",
+    paddingHorizontal: 20,
+  },
+});

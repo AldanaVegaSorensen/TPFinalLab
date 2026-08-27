@@ -13,10 +13,9 @@
   {
     "id": 2,
     "user_id": 4,
-    "name": "Varias 7",
+    "name": "Varias 8",
     "movies": [
       13,
-      497,
       1007757,
       687163
     ],
@@ -61,5 +60,12 @@
       980431
     ],
     "created_at": "2026-08-27T01:06:09.561Z"
+  },
+  {
+    "id": 7,
+    "user_id": 4,
+    "name": "Animadas",
+    "movies": [],
+    "created_at": "2026-08-27T19:36:26.852Z"
   }
 ]

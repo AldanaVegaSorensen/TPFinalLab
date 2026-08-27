@@ -73,6 +73,32 @@ const HistoryModel = {
 
         return userHistory;
     },
+
+    async updateMovie(userId, movieId, watchedAt) {
+        const history = readHistory();
+
+        const userHistory = history.find(
+            item => item.user_id === userId
+        );
+
+        if (!userHistory) {
+            return null;
+        }
+
+        const movie = userHistory.movies.find(
+            movie => movie.movie_id === movieId
+        );
+
+        if (!movie) {
+            return null;
+        }
+
+        movie.watched_at = watchedAt;
+
+        writeHistory(history);
+
+        return userHistory;
+    },
 };
 
 module.exports = HistoryModel;

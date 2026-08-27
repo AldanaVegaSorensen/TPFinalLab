@@ -15,6 +15,7 @@ import ModalReview from "@/src/components/ModalReview";
 import ModalLista from "@/src/components/ModalLista";
 import { useHistory } from "../../hooks/useHistory";
 import { useLists } from "@/src/hooks/useList";
+import { Review } from "@/src/types/review";
 
 const {width, height} = Dimensions.get('screen');
 
@@ -23,48 +24,77 @@ export default function MovieDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
 
   const { movie, loading, error } = useMovie(Number(id));
-  const { reviews, loading: reviewsLoading, createReview, reloadReviews} = useReviews(Number(id));
+  const { reviews, loading: reviewsLoading, createReview, reloadReviews, updateReview, deleteReview} = useReviews(Number(id));
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [isListModalVisible, setIsListModalVisible] = useState(false);
-
-  const { addMovie: addToHistory} = useHistory();
+  const [editingReview, setEditingReview] = useState<Review | null>(null);
+  
+  const { history, addMovie: addToHistory, updateHistory } = useHistory();
 
   const { lists, createList, addMovieToList} = useLists();
+  
 
     const handleSaveReview = async (
         fecha: Date,
         rating: number | null,
         comment: string
     ) => {
-
         try {
+            if (rating === null) return;
 
             const movieId = Number(id);
 
-            if (rating !== null) {
+            if (editingReview) {
+            await updateReview(
+                editingReview.id,
+                rating,
+                comment
+            );
 
-                await createReview(
-                    {movieId,
-                    rating,
-                    comment}
-                );
+            await updateHistory(
+                movieId,
+                fecha.toISOString()
+            );
 
-                console.log("Review guardada:");
-            }
+            console.log("Review actualizada");
+
+        } else {
+
+            // CREAR
+            await createReview({
+                movieId,
+                rating,
+                comment
+            });
+
+            console.log("Review creada");
 
             await addToHistory(
                 movieId,
                 fecha.toISOString()
             );
+        }
 
             await reloadReviews();
-
             setIsModalVisible(false);
 
         } catch (error: any) {
-        
         }
     };
+
+    const handleEditReview = (review: Review) => {
+        setEditingReview(review);
+
+        const historyMovie = history?.movies.find(
+            (item) => item.movie_id === review.movie_id
+        );
+
+
+        setIsModalVisible(true);
+    };
+    const watchedAt = history?.movies.find(
+        (item) => item.movie_id === Number(id)
+    )?.watched_at;
 
     const handleCreateList = async (
         name: string,
@@ -112,6 +142,22 @@ export default function MovieDetailScreen() {
         }
     };
     
+    const handleDeleteReview = async (reviewId: number) => {
+    try {
+        await deleteReview(reviewId);
+
+        await reloadReviews();
+
+        console.log("Review eliminada");
+
+    } catch (error: any) {
+        console.error(
+            "Error eliminando review:",
+            error.response?.data || error
+        );
+    }
+};
+
   if (loading) {
     return (
       <View>
@@ -217,14 +263,23 @@ export default function MovieDetailScreen() {
         </View>
 
         {/* REVIEWS MAS RECIENTES */}
-        <Reviews reviews={reviews}/>
+        <Reviews
+            reviews={reviews}
+            onEdit={handleEditReview}
+            onDelete={handleDeleteReview}
+        />
 
         {/*MODAL PARA REVIEW y agregar lista */}
         <ModalReview
-            visible={isModalVisible}
-            onClose={() => setIsModalVisible(false)}
-            onSave={handleSaveReview}
-        />
+        visible={isModalVisible}
+        onClose={() => {
+            setIsModalVisible(false);
+            setEditingReview(null);
+        }}
+        onSave={handleSaveReview}
+        review={editingReview}
+        watchedAt={watchedAt}
+    />
 
         <ModalLista
             visible={isListModalVisible}

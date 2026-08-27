@@ -18,48 +18,53 @@ import {
 } from "react-native";
 
 export default function ListScreen() {
-  const { id, movies: moviesParam, name } = useLocalSearchParams();
+  const { id } = useLocalSearchParams();
 
-  const movieIds = moviesParam
-    ? JSON.parse(moviesParam as string)
-    : [];
   const [movies, setMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(true);
   const [editingName, setEditingName] = useState(false);
-  const [listName, setListName] = useState((name as string) ?? "");
   const [editMode, setEditMode] = useState(false);
+  const [listName, setListName] = useState("");
+
   const {
-    lists,
     updateList,
     removeMovieFromList,
+    getList
   } = useLists();
 
   
 
   useEffect(() => {
-    const loadMovies = async () => {
-      try {
-        setLoading(true);
+  const loadList = async () => {
+    try {
+      setLoading(true);
 
-        const responses = await Promise.all(
-          movieIds.map((movieId: number) =>
-            movieService.getMovie(movieId)
-          )
-        );
+      const list = await getList(Number(id));
 
-        setMovies(
-          responses.map((response) => response.data)
-        );
+      const responses = await Promise.all(
+      list.movies.map((movieId: number) =>
+        movieService.getMovie(movieId)
+      )
+    );
 
-      } catch (error) {
-        console.error("Error cargando películas:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+    const moviesData = responses.map(
+      (response) => response
+    );
 
-    loadMovies();
-  }, [moviesParam]);
+
+    setMovies(moviesData);
+      setListName(list.name || "");
+    } catch (error) {
+      console.error("Error cargando lista:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (id) {
+    loadList();
+  }
+}, [id]);
 
   const handleUpdateName = async () => {
     if (!listName.trim()) return;
@@ -112,7 +117,7 @@ export default function ListScreen() {
   }
 
   
-
+console.log("MOVIES PARA MOSTRAR:", movies);
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -128,7 +133,7 @@ export default function ListScreen() {
             placeholderTextColor="#ccc"
           />
         ) : (
-          <Text style={styles.title}>{listName || name}</Text>
+          <Text style={styles.title}>{listName}</Text>
         )}
 
         <View style={styles.headerActions}>

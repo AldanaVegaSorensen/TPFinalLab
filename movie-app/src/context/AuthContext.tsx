@@ -1,14 +1,23 @@
 // AuthContext.tsx
-import { use, createContext, type PropsWithChildren } from 'react';
+import { use, createContext, type PropsWithChildren, useState } from 'react';
 
 import { useStorageState } from '../hooks/useStorageState';
 import { authService } from '../services/auth.service';
+
+type User = {
+  id: number;
+  name: string;
+  email: string;
+};
 
 const AuthContext = createContext<{
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (name: string, email: string, password: string) => Promise<void>;
   signOut: () => void;
+
   session?: string | null;
+  user?: User | null;
+
   isLoading: boolean;
 } | null>(null);
 
@@ -24,13 +33,15 @@ export function useSession() {
 
 export function SessionProvider({ children }: PropsWithChildren) {
   const [[isLoading, session], setSession] = useStorageState('session');
-
+  const [user, setUser] = useState<User | null>(null);
+  
   return (
     <AuthContext.Provider
       value={{
         signIn: async (email: string, password: string) => {
           const { data } = await authService.login(email, password);
           setSession(data.token);
+          setUser(data.user)
         },
         signUp: async (name: string, email: string, password: string) => {
           const { data } = await authService.register(name, email, password);
@@ -41,6 +52,7 @@ export function SessionProvider({ children }: PropsWithChildren) {
         },
         session,
         isLoading,
+        user
       }}>
       {children}
     </AuthContext.Provider>

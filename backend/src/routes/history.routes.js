@@ -5,6 +5,6 @@ const authMiddleware = require("../middleware/auth.middleware")
 
 router.get("/", authMiddleware, controller.getHistory);
 router.post("/", authMiddleware, controller.addMovie);
-
+router.put("/:movieId", authMiddleware, controller.updateMovie);
 
 module.exports = router;

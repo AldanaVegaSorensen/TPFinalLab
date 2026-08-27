@@ -1,7 +1,6 @@
 import { View, Text, StyleSheet, Dimensions } from 'react-native'
 import { Movie } from '../types/movie';
 import { Carousel } from "react-native-reanimated-carousel";
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { COLORS } from '@/src/constants/colors';
 import MovieCard from './movieCard';
 

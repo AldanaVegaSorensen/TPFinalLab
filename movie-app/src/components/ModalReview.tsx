@@ -16,13 +16,15 @@ interface ModalReviewProps {
         comment: string
     ) => void;
     review?: Review | null;
+    watchedAt?: string;
 }
 
 export default function ModalReview({
   visible,
   onClose,
   onSave,
-  review
+  review,
+  watchedAt
 }: ModalReviewProps) {
     const [fecha, setFecha] = useState<Date>(new Date());
     const [rating, setRating] = useState<number>(0);
@@ -33,16 +35,21 @@ export default function ModalReview({
     };
     
     useEffect(() => {
-    if (visible) {
-        if (review) {
+        if (visible) {
+            if (review) {
             setRating(review.rating);
             setComment(review.comment);
-        } else {
+
+            if (watchedAt) {
+                setFecha(new Date(watchedAt));
+            }
+            } else {
+            setFecha(new Date());
             setRating(0);
             setComment("");
+            }
         }
-    }
-}, [visible, review]);
+    }, [visible, review, watchedAt]);
     
     return(
         <Modal

@@ -15,10 +15,11 @@ export default function Home() {
   const nowPlaying = useMovies("now_playing")
 
   if (
-    popular.loading ||
-    topRated.loading ||
-    upcoming.loading
-  ) {
+  popular.loading ||
+  topRated.loading ||
+  upcoming.loading ||
+  nowPlaying.loading
+) {
     return (
       <View>
         <ActivityIndicator size="large" />
@@ -27,15 +28,17 @@ export default function Home() {
   }
 
   if (
-    popular.error ||
-    topRated.error ||
-    upcoming.error
-  ) {
+  popular.error ||
+  topRated.error ||
+  upcoming.error ||
+  nowPlaying.error
+) {
     return (
       <Text>
         {popular.error ||
           topRated.error ||
-          upcoming.error}
+          upcoming.error ||
+          nowPlaying.error}
       </Text>
     );
   }

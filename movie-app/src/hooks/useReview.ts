@@ -86,4 +86,3 @@ export function useReviews(movieId: number) {
   };
 }
 
-export { Review };
