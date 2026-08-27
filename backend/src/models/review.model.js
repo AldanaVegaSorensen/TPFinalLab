@@ -42,17 +42,22 @@ const ReviewModel = {
     );
 
     const reviewsWithUsers = await Promise.all(
-        reviews.map(async (review) => {
-            const user = await UserModel.findById(review.user_id);
+    reviews.map(async (review) => {
+        const user = await UserModel.findById(review.user_id);
 
-            return {
-                ...review,
-                user: {
-                    name: user ? user.name : "Usuario desconocido",
-                },
-            };
-        })
-    );
+        return {
+            id: review.id,
+            movie_id: review.movie_id,
+            rating: review.rating,
+            comment: review.comment,
+            created_at: review.created_at,
+            user: {
+                id: review.user_id,
+                name: user ? user.name : "Usuario desconocido",
+            },
+        };
+    })
+);
 
     return reviewsWithUsers.sort(
         (a, b) =>

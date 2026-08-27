@@ -100,10 +100,11 @@ async function byId(req, res) {
   try {
     const { id } = req.params;
 
-    if (!Number.isInteger(id) || id <= 0) {
-        return res.status(400).json({
-            message: "El ID debe ser válido"
-        });
+    const userId = Number(id);
+
+    if (isNaN(userId)) {
+    console.error("ID de usuario inválido");
+    return;
     }
 
 
@@ -120,6 +121,10 @@ async function byId(req, res) {
 
 async function getMovies(req, res) {
     try {
+
+        const cantidad = Number(req.query.cantidad) || 10;
+        const from = Number(req.query.from) || 0;
+
         if (
             req.query.cantidad !== undefined &&
             (!Number.isInteger(cantidad) || cantidad <= 0)
@@ -137,9 +142,6 @@ async function getMovies(req, res) {
                 message: "from debe ser un número entero mayor o igual a 0"
             });
         }
-
-        const cantidad = Number(req.query.cantidad) || 10;
-        const from = Number(req.query.from) || 0;
 
 
         const movies = await movieService.getMovies(cantidad, from);

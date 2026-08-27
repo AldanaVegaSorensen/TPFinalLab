@@ -13,9 +13,8 @@
   {
     "id": 2,
     "user_id": 4,
-    "name": "Varias 6",
+    "name": "Varias 7",
     "movies": [
-      278,
       13,
       497,
       1007757,
@@ -58,7 +57,8 @@
     "user_id": 4,
     "name": "Para ver",
     "movies": [
-      1339713
+      1339713,
+      980431
     ],
     "created_at": "2026-08-27T01:06:09.561Z"
   }

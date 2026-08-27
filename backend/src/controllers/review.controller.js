@@ -31,13 +31,14 @@ async function createReview(req, res){
             throw error;
         }
 
-        const review = await reviewService.createReview(userId, movieId, rating, comment);
+        const review = await reviewService.createReview(req.user.userId, movieId, rating, comment);
 
         res.status(201).json(review);
 
     } catch (error) {
-        res.status(400).json({ message: error.message });
-  }
+  console.error("Error completo creando review:", error);
+  console.log(JSON.stringify(error, null, 2));
+}
 }
 
 async function getReviewsByMovie(req, res){
@@ -62,7 +63,7 @@ async function updateReview(req, res){
     const reviewId = Number(req.params.id);
     const { rating, comment } = req.body;
 
-    if (!Number.isInteger(movieId) || movieId <= 0) {
+    if (!Number.isInteger(reviewId) || reviewId <= 0) {
             const error = new Error(
                 "El ID de la película debe ser un número entero mayor que 0"
             );

@@ -61,7 +61,7 @@ async function addMovie(req, res){
 
     const list = await ListService.addMovie(listId, movieId);
 
-    res.status(200).json(lists);
+    res.status(200).json(list);
 
   } catch (error) {
 
@@ -126,7 +126,7 @@ async function updateList(req, res){
 
     const list = await ListService.updateList(listId, userId, name);
 
-    res.status(200).json(lists);
+    res.status(200).json(list);
 
   } catch (error) {
     res.status(400).json({
