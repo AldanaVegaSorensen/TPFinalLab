@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { movieService } from "@/src/services/movie.service";
-import { Movie } from "@/src/types/movie";
+import { Movie, MovieCategory } from "@/src/types/movie";
 
-export function useMovies(category: string) {
+export function useMovies(category: MovieCategory) {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

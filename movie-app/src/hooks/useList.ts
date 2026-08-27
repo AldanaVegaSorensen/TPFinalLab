@@ -1,19 +1,17 @@
 import { useEffect, useState } from "react";
 import { listService } from "@/src/services/list.service";
 import { movieService } from "../services/movie.service";
+import { MovieList } from "../types/list";
 
-export type MovieList = {
-    id: number;
-    user_id: number;
-    name: string;
-    movies: number[];
-};
+
 
 export function useLists() {
 
     const [lists, setLists] = useState<MovieList[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+
+    
 
     const loadLists = async () => {
 
@@ -23,15 +21,16 @@ export function useLists() {
             setError(null);
 
             const response = await listService.getLists();
-console.log("Listas a cargar: ",response.data)
-            setLists(response.data);
+console.log("Listas a cargar: ",response)
+            setLists(response);
 
-        } catch (error) {
-
+        } catch (error: any) {
             console.error("Error cargando listas:", error);
 
-            setError("No se pudieron cargar las listas");
-
+            setError(
+              error.response?.message ??
+              "No se pudieron cargar las listas"
+            );
         } finally {
 
             setLoading(false);
@@ -45,10 +44,10 @@ console.log("Listas a cargar: ",response.data)
 
         setLists(prev => [
             ...prev,
-            response.data
+            response
         ]);
 
-        return response.data;
+        return response;
     };
 
 
@@ -65,30 +64,30 @@ console.log("Listas a cargar: ",response.data)
         setLists(prev =>
             prev.map(list =>
                 list.id === listId
-                    ? response.data
+                    ? response
                     : list
             )
         );
 
-        return response.data;
+        return response;
     };
 
     const updateList = async (
-  listId: number,
-  name: string
-) => {
-  try {
-    console.log("Datos a enviar: ",listId, name)
-    const response = await listService.update(
-      listId,
-      name
-    );
+      listId: number,
+      name: string
+    ) => {
+      try {
+        console.log("Datos a enviar: ",listId, name)
+        const response = await listService.update(
+          listId,
+          name
+        );
 
     
 
     await loadLists();
 
-    return response.data;
+    return response;
   } catch (error) {
     console.error(
       "Error actualizando lista:",
@@ -123,6 +122,27 @@ const removeMovieFromList = async (
   }
 };
 
+  const getList = async (
+    listId: number,
+  )=>{
+    try {
+        console.log("Datos a enviar: ",listId)
+        const response = await listService.getById(listId)
+
+        console.log("Lista recibida: ",response)
+    
+
+    return response;
+  } catch (error) {
+    console.error(
+      "Error actualizando lista:",
+      error
+    );
+
+    throw error;
+  }
+};
+
 
 
     useEffect(() => {
@@ -138,6 +158,7 @@ const removeMovieFromList = async (
         addMovieToList,
         reloadLists: loadLists,
         updateList,
-        removeMovieFromList
+        removeMovieFromList,
+        getList,
     };
 }

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { movieService } from "@/src/services/movie.service";
-import { Movie, MovieDetails } from "@/src/types/movie";
+import { MovieDetails } from "@/src/types/movie";
 
 export function useMovie(id: number) {
   const [movie, setMovie] = useState<MovieDetails | null>(null);
@@ -17,7 +17,7 @@ export function useMovie(id: number) {
 
         const response = await movieService.getMovie(id);
         console.log("Respuesta recibida en frontend:", response.data);
-        setMovie(response.data);
+        setMovie(response);
       } catch (error) {
         console.error("Error cargando película:", error);
         setError("No se pudo cargar la película");

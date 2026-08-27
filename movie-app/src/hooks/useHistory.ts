@@ -1,31 +1,18 @@
 import { useEffect, useState } from "react";
-
 import { historyService } from "@/src/services/history.service";
 import { movieService } from "../services/movie.service";
-
-export type HistoryMovie = {
-    movie_id: number;
-    watched_at: string;
-};
-
-export type History = {
-    user_id: number;
-    movies: HistoryMovie[];
-};
-
+import { History, HistoryMovie } from "../types/history";
+import { Movie } from "../types/movie";
 
 export function useHistory() {
 
-    const [history, setHistory] =
-        useState<History | null>(null);
+    const [history, setHistory] = useState<History | null>(null);
 
-    const [loading, setLoading] =
-        useState(true);
+    const [loading, setLoading] = useState(true);
 
-    const [error, setError] =
-        useState<string | null>(null);
+    const [error, setError] = useState<string | null>(null);
 
-    const [movies, setMovies] = useState<any[]>([]);
+    const [movies, setMovies] = useState<Movie[]>([]);
 
 
     const loadHistory = async () => {
@@ -35,20 +22,15 @@ export function useHistory() {
             setLoading(true);
             setError(null);
 
-            const response =
-                await historyService.getHistory();
-
-            const history = response.data.movies;
+            const response = await historyService.getHistory();
+            const history = response.movies;
 
             const movies = await Promise.all(
-                        history.map((item: any) =>
-                            movieService.getMovie(item.movie_id)
-                        )
-                    );
+                history.map((item: HistoryMovie) => movieService.getMovie(item.movie_id))
+            );
 
-
-            setHistory(response.data);
-            setMovies(movies.map((response) => response.data));
+            setHistory(history);
+            setMovies(movies);
 
         } catch (error: any) {
     console.error(
@@ -77,12 +59,8 @@ export function useHistory() {
 
         try {
 
-            const response =
-                await historyService.addMovie(
-                    movieId,
-                    watchedAt
-                );
-
+            const response =  await historyService.addMovie( movieId, watchedAt);
+            console.log("se agreago una pelicula: ",response)
             setHistory(response.data);
 
 

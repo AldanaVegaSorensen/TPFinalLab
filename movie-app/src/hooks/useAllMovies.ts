@@ -2,57 +2,62 @@ import { useEffect, useState } from "react";
 import { movieService } from "@/src/services/movie.service";
 import { Movie } from "@/src/types/movie";
 
+const PAGE_SIZE=10;
+
 export function useAllMovies() {
   const [movies, setMovies] = useState<Movie[]>([]);
+  const [from, setFrom] = useState(0);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const [page, setPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
-
-  const loadMovies = async (pageToLoad: number) => {
+  const loadMovies = async () => {
     try {
-      if (pageToLoad === 1) {
-        setLoading(true);
-      } else {
-        setLoadingMore(true);
-      }
-
+      setLoading(true);
       setError(null);
 
-      const response = await movieService.getAllMovies(pageToLoad);
+      const data = await movieService.getAllMovies(PAGE_SIZE, 0);
 
-      setMovies((prevMovies) => {
-        if (pageToLoad === 1) {
-          return response.results;
-        }
+      setMovies(data.results);
+      setFrom(PAGE_SIZE);
 
-        return [...prevMovies, ...response.results];
-      });
-
-      setHasMore(pageToLoad < response.total_pages);
-      setPage(pageToLoad);
-    } catch (err) {
-      console.error("Error cargando películas:", err);
-      setError("No se pudieron cargar las películas.");
+    } catch (error) {
+      console.error("Error cargando películas:", error);
+      setError("No se pudieron cargar las películas");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const loadMoreMovies = async () => {
+    if (loadingMore) return;
+
+    try {
+      setLoadingMore(true);
+      setError(null);
+
+      const data = await movieService.getAllMovies(
+        PAGE_SIZE,
+        from
+      );
+
+      setMovies((prev) => [
+        ...prev,
+        ...data.results,
+      ]);
+
+      setFrom((prev) => prev + PAGE_SIZE);
+
+    } catch (error) {
+      console.error("Error cargando más películas:", error);
+    } finally {
       setLoadingMore(false);
     }
   };
 
   useEffect(() => {
-    loadMovies(1);
+    loadMovies();
   }, []);
-
-  const loadMoreMovies = () => {
-    if (loadingMore || !hasMore) {
-      return;
-    }
-
-    loadMovies(page + 1);
-  };
 
   return {
     movies,
@@ -60,6 +65,6 @@ export function useAllMovies() {
     loadingMore,
     error,
     loadMoreMovies,
-    hasMore,
+    //hasMore,
   };
 }

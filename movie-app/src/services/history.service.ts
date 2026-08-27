@@ -2,7 +2,10 @@ import api from "./api";
 
 export const historyService = {
 
-    getHistory: () => api.get("/history") ,
+    async getHistory() { 
+        const { data } = await api.get("/history") 
+        return data
+    },
 
     addMovie: ( movieId: number, watchedAt: string) => api.post("/history", { movieId, watchedAt, }),
 
