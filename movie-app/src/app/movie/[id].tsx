@@ -48,19 +48,16 @@ export default function MovieDetailScreen() {
             const movieId = Number(id);
 
             if (editingReview) {
-            await updateReview(
-                editingReview.id,
-                rating,
-                comment
-            );
+                await updateReview(
+                    editingReview.id,
+                    rating,
+                    comment
+                );
 
-            await updateHistory(
-                movieId,
-                fecha.toISOString()
-            );
-
-            console.log("Review actualizada");
-
+                await updateHistory(
+                    movieId,
+                    fecha.toISOString()
+                );
         } else {
 
             // CREAR
@@ -87,12 +84,6 @@ export default function MovieDetailScreen() {
 
     const handleEditReview = (review: Review) => {
         setEditingReview(review);
-
-        const historyMovie = history?.movies.find(
-            (item) => item.movie_id === review.movie_id
-        );
-
-
         setIsModalVisible(true);
     };
 

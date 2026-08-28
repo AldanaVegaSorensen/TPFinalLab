@@ -24,36 +24,31 @@ export default function ListScreen() {
   
 
   useEffect(() => {
-  const loadList = async () => {
-    try {
-      setLoading(true);
+    const loadList = async () => {
+      try {
+        setLoading(true);
 
-      const list = await getList(Number(id));
+        const list = await getList(Number(id));
 
-      const responses = await Promise.all(
-      list.movies.map((movieId: number) =>
-        movieService.getMovie(movieId)
-      )
-    );
+        const moviesData = await Promise.all(
+          list.movies.map((movieId: number) =>
+            movieService.getMovie(movieId)
+          )
+        );
 
-    const moviesData = responses.map(
-      (response) => response
-    );
+        setMovies(moviesData);
+        setListName(list.name || "");
+      } catch (error) {
+        console.error("Error cargando lista:", error);
+      } finally {
+        setLoading(false);
+      }
+      };
 
-
-    setMovies(moviesData);
-      setListName(list.name || "");
-    } catch (error) {
-      console.error("Error cargando lista:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  if (id) {
-    loadList();
-  }
-}, [id]);
+      if (id) {
+        loadList();
+      }
+  }, [id]);
 
   const handleUpdateName = async () => {
     if (!listName.trim()) return;

@@ -78,7 +78,7 @@ export default function Register() {
               <View style={authStyles.input}>
                 <Text style={commonStyles.inputLabel}>Contraseña</Text>
                 <TextInput autoCorrect={false} autoCapitalize='none' placeholder="***********" placeholderTextColor="#6b7280" value={form.password} onChangeText={password => setForm({...form, password})} secureTextEntry style={commonStyles.inputText}/>
-                {error && <Text>{error}</Text>}  
+                {error && <Text style={commonStyles.errorText}>{error}</Text>}  
               </View>
     
               <View style={authStyles.formAction}>
