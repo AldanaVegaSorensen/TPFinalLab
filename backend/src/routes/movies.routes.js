@@ -6,7 +6,6 @@ router.get("/popular", controller.popular);
 router.get("/top-rated", controller.topRated);
 router.get("/upcoming", controller.upcoming);
 router.get("/now-playing", controller.nowPlaying);
-router.get("/genre/:genreId", controller.byGenre);
 router.get("/search", controller.searchMovies);
 router.get("/:id", controller.byId);
 

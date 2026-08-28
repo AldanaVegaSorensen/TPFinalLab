@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, StyleSheet, Pressable, Dimensions, ActivityIndicator, Image, Modal } from "react-native";
+import { View, Text, ScrollView, StyleSheet, Pressable, Dimensions, ActivityIndicator, Image, Modal, Alert } from "react-native";
 import { useLocalSearchParams } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons"; 
@@ -16,22 +16,23 @@ import ModalLista from "@/src/components/ModalLista";
 import { useHistory } from "../../hooks/useHistory";
 import { useLists } from "@/src/hooks/useList";
 import { Review } from "@/src/types/review";
+import ActionButton from "@/src/components/ActionButton";
 
 const {width, height} = Dimensions.get('screen');
 
 
 export default function MovieDetailScreen() {
-  const { id } = useLocalSearchParams<{ id: string }>();
+    const { id } = useLocalSearchParams<{ id: string }>();
 
-  const { movie, loading, error } = useMovie(Number(id));
-  const { reviews, loading: reviewsLoading, createReview, reloadReviews, updateReview, deleteReview} = useReviews(Number(id));
-  const [isModalVisible, setIsModalVisible] = useState(false)
-  const [isListModalVisible, setIsListModalVisible] = useState(false);
-  const [editingReview, setEditingReview] = useState<Review | null>(null);
-  
-  const { history, addMovie: addToHistory, updateHistory } = useHistory();
+    const { movie, loading, error } = useMovie(Number(id));
+    const { reviews, loading: reviewsLoading, createReview, reloadReviews, updateReview, deleteReview} = useReviews(Number(id));
+    const [isModalVisible, setIsModalVisible] = useState(false)
+    const [isListModalVisible, setIsListModalVisible] = useState(false);
+    const [editingReview, setEditingReview] = useState<Review | null>(null);
+    
+    const { history, addMovie: addToHistory, updateHistory } = useHistory();
 
-  const { lists, createList, addMovieToList} = useLists();
+    const { lists, createList, addMovieToList} = useLists();
   
 
     const handleSaveReview = async (
@@ -143,35 +144,50 @@ export default function MovieDetailScreen() {
     };
     
     const handleDeleteReview = async (reviewId: number) => {
-    try {
-        await deleteReview(reviewId);
+        Alert.alert(
+            "Eliminar review",
+            "¿Querés eliminar la review?",
+            [
+                { text: "Cancelar", style: "cancel" },
+                {
+                    text: "Eliminar",
+                    style: "destructive",
+                    onPress: async () => {
+                        try {
+                            await deleteReview(reviewId);
 
-        await reloadReviews();
+                            await reloadReviews();
 
-        console.log("Review eliminada");
+                            console.log("Review eliminada");
 
-    } catch (error: any) {
-        console.error(
-            "Error eliminando review:",
-            error.response?.data || error
+                        } catch (error: any) {
+                            console.error(
+                                "Error eliminando review:",
+                                error.response?.data || error
+                            );
+                        }
+                    },
+                },
+            ]
         );
-    }
-};
+    };
 
   if (loading) {
     return (
-      <View>
-        <ActivityIndicator size="large" />
-      </View>
+        <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color="white" />
+        </View>
     );
   }
 
   if (error || !movie) {
     return (
-      <View>
-        <Text>{error ?? "Película no encontrada"}</Text>
-      </View>
-    );
+          <View style={styles.container}>
+            <Text style={styles.errorText}>
+              {error ?? "Película no encontrada"}
+            </Text>
+          </View>
+        );
   }
 
   return (
@@ -234,26 +250,17 @@ export default function MovieDetailScreen() {
         {/*ACCIONES */}
         <View style={styles.actions}>
             
-            <Pressable
-                style={styles.actionButton}
-                onPress={() => {
-                setIsListModalVisible(true)
-                }}
-            >
-                <Ionicons name="add-circle" size={28} color="white" />
-                <Text style={styles.actionText}>Agregar a lista</Text>
-            </Pressable>
+            <ActionButton
+                icon="add-circle"
+                title="Agregar a lista"
+                onPress={() => setIsListModalVisible(true)}
+            />
 
-            <Pressable
-                style={styles.actionButton}
-                onPress={() => {
-                // realizar review
-                setIsModalVisible(true)
-                }}
-            >
-                <Ionicons name="eye" size={28} color="white" />
-                <Text style={styles.actionText}>Review</Text>
-            </Pressable>
+            <ActionButton
+                icon="eye"
+                title="Review"
+                onPress={() => setIsModalVisible(true)}
+            />
         </View>
 
         {/*CAST Y CREW */}
@@ -271,15 +278,15 @@ export default function MovieDetailScreen() {
 
         {/*MODAL PARA REVIEW y agregar lista */}
         <ModalReview
-        visible={isModalVisible}
-        onClose={() => {
-            setIsModalVisible(false);
-            setEditingReview(null);
-        }}
-        onSave={handleSaveReview}
-        review={editingReview}
-        watchedAt={watchedAt}
-    />
+            visible={isModalVisible}
+            onClose={() => {
+                setIsModalVisible(false);
+                setEditingReview(null);
+            }}
+            onSave={handleSaveReview}
+            review={editingReview}
+            watchedAt={watchedAt}
+        />
 
         <ModalLista
             visible={isListModalVisible}
@@ -354,6 +361,18 @@ const styles  = StyleSheet.create({
         color: COLORS.text,
         fontSize: 16,
         fontWeight: "600",
+    },
+    errorText: {
+        color: "white",
+        fontSize: 16,
+        textAlign: "center",
+        paddingHorizontal: 20,
+    },
+    loadingContainer: {
+        flex: 1,
+        backgroundColor: "#000",
+        alignItems: "center",
+        justifyContent: "center",
     },
 
 })

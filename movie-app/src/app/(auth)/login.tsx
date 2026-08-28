@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { View, TextInput, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { router } from 'expo-router';
 import { useSession } from '@/src/context/AuthContext';
+import PrimaryButton from '@/src/components/PrimaryButton';
 
 export default function Login() {
   const { signIn } = useSession();
@@ -65,11 +66,10 @@ export default function Login() {
           </View>
 
           <View style={styles.formAction}>
-            <TouchableOpacity onPress={handleLogin}>
-                <View style={styles.btn}>
-                  <Text style={styles.textbtn}>Ingresar</Text>
-                </View>
-            </TouchableOpacity>
+            <PrimaryButton
+              title="Iniciar sesión"
+              onPress={handleLogin}
+            />
           </View>
           
           <TouchableOpacity style={{marginTop:'auto'}}>
@@ -134,21 +134,4 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     letterSpacing: 0.15
   },
-  btn:{
-    backgroundColor:"#4CD5CA", 
-    borderRadius:8,
-    borderWidth: 1,
-    borderColor: "#36C1B5",
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical:10,
-    paddingHorizontal: 10
-  },
-  textbtn:{
-    fontSize: 18,
-    fontWeight: '600',
-    color: "#fff"
-  },
-
   });

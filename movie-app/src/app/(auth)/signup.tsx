@@ -84,11 +84,10 @@ export default function Register() {
               </View>
     
               <View style={styles.formAction}>
-                <TouchableOpacity onPress={handleRegister}>
-                    <View style={styles.btn}>
-                      <Text style={styles.textbtn}>Crear cuenta</Text>
-                    </View>
-                </TouchableOpacity>
+                <PrimaryButton
+                  title="Crear cuenta"
+                  onPress={handleRegister}
+                />
               </View>
               
               <TouchableOpacity style={{marginTop:'auto'}}>

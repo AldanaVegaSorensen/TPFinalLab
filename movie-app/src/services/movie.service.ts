@@ -20,12 +20,6 @@ export const movieService = {
     return data;
   },
 
-
-  async getByGenre(genreId: number) {
-    const { data } = await api.get(`/movies/genre/${genreId}`);
-    return data;
-  },
-
   async getMovies(category: MovieCategory) {
     const route = CATEGORY_ROUTES[category];
     const { data } = await api.get(`/movies/${route}`);

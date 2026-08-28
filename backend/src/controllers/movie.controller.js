@@ -72,30 +72,6 @@ async function nowPlaying(req, res) {
     }
 }
 
-async function byGenre(req, res) {
-  try {
-    const { genreId } = req.params;
-
-    if (!Number.isInteger(genreId) || genreId <= 0) {
-        const error = new Error("El ID de género no es válido");
-        error.statusCode = 422;
-        throw error;
-    }
-
-    const movies =
-      await movieService.getMoviesByGenre(genreId);
-
-    res.json(movies);
-
-  } catch (err) {
-    console.error(err);
-
-    res.status(404).json({
-      error: "No se pudieron obtener las películas.",
-    });
-  }
-}
-
 async function byId(req, res) {
   try {
     const { id } = req.params;
@@ -189,7 +165,6 @@ module.exports = {
     popular,
     topRated,
     upcoming,
-    byGenre,
     nowPlaying,
     byId,
     getMovies,

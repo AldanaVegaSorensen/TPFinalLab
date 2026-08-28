@@ -1,44 +1,57 @@
-import { View, StyleSheet, TextInput } from "react-native";
 import React from "react";
+import { View, StyleSheet, TextInput } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
 interface Props {
-    placeholder: string,
-    onPress?: ()=> void;
+  placeholder?: string;
+  value: string;
+  onChangeText: (text: string) => void;
 }
 
-const SearchBar = ({placeholder, onPress}:Props) =>{
-    return (
-        <View style={styles.container}>
-            <Ionicons name="search" size={15} color={"white"} />
-            <TextInput
-                onPress={onPress}
-                placeholder={placeholder}
-                value=""
-                onChange={()=>{}}
-                placeholderTextColor={"gray"}
-                style={styles.textInput}
-            />
-        
-        </View>
-    )
-}
+export const SearchBar = ({
+  placeholder,
+  value,
+  onChangeText,
+}: Props) => {
+  return (
+    <View style={styles.container}>
+      <Ionicons
+        name="search"
+        size={20}
+        color="#888"
+        style={styles.icon}
+      />
 
-export default SearchBar
+      <TextInput
+        placeholder={placeholder}
+        value={value}
+        onChangeText={onChangeText}
+        clearButtonMode="always"
+        autoCorrect={false}
+        style={styles.input}
+      />
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#243458", 
-    borderRadius: 9999,
-    paddingHorizontal: 20,
-    paddingVertical: 10
+    marginHorizontal: 20,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 8,
+    paddingHorizontal: 12,
   },
-  textInput:{
-    flex: 1, 
-    marginLeft: 5, 
-    color: "white",
-    paddingVertical: 0
-  }
+
+  icon: {
+    marginRight: 8,
+  },
+
+  input: {
+    flex: 1,
+    paddingVertical: 10,
+  },
 });
+

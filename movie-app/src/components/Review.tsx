@@ -7,7 +7,6 @@ import {
   Pressable,
 } from "react-native";
 import { COLORS } from '@/src/constants/colors';
-import { jwtDecode } from "jwt-decode";
 import { useSession } from "../context/AuthContext";
 import { Review } from "../types/review";
 
@@ -17,9 +16,6 @@ interface ReviewsProps {
     onDelete: (reviewId: number) => void;
 }
 
-interface TokenPayload {
-    userId: number;
-}
 
 export default function Reviews({
     reviews,

@@ -1,10 +1,11 @@
-import { View, Text, Pressable, FlatList, StyleSheet } from "react-native";
+import { View, Text, Pressable, FlatList, StyleSheet, ActivityIndicator } from "react-native";
 import { router, useFocusEffect } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 
 import { COLORS } from "@/src/constants/colors";
 import { useLists } from "@/src/hooks/useList";
 import { useCallback } from "react";
+import IconButton from "@/src/components/IconButton";
 
 export default function ListsScreen() {
 console.log("EN LA SCREEN DE LISTAS")
@@ -23,20 +24,18 @@ console.log("EN LA SCREEN DE LISTAS")
 
     if (loading) {
         return (
-            <View style={styles.center}>
-                <Text style={styles.text}>
-                    Cargando listas...
-                </Text>
+            <View style={styles.loadingContainer}>
+                <ActivityIndicator size="large" color="white" />
             </View>
         );
     }
 
     if (error) {
         return (
-            <View style={styles.center}>
-                <Text style={styles.text}>
-                    {error}
-                </Text>
+            <View style={styles.container}>
+                <Text style={styles.errorText}>
+                  {error }
+                </Text>                  
             </View>
         );
     }
@@ -46,13 +45,12 @@ console.log("EN LA SCREEN DE LISTAS")
 
             <View style={styles.header}>
                 <Text style={styles.title}>Mis listas</Text>
-                <Pressable style={styles.close} onPress={()=>router.back()}>
-                    <Ionicons
-                        name="close"
-                        size={28}
-                        color="white"
-                    />
-                </Pressable>
+
+                <IconButton
+                  icon="close"
+                  onPress={() => router.back()}
+                  style={styles.close}
+                />
             </View>
 
             {lists.length === 0 ? (
@@ -208,4 +206,16 @@ marginHorizontal:10,
     color: "#999999",
     fontSize: 14,
   },
+  errorText: {
+        color: "white",
+        fontSize: 16,
+        textAlign: "center",
+        paddingHorizontal: 20,
+    },
+    loadingContainer: {
+        flex: 1,
+        backgroundColor: "#000",
+        alignItems: "center",
+        justifyContent: "center",
+    },
 })

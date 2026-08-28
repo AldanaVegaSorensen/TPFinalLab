@@ -6,6 +6,7 @@ import { Ionicons } from "@expo/vector-icons";
 import CircularSlider from "@/src/components/circularSlider";
 import { router } from "expo-router";
 import { COLORS } from '@/src/constants/colors';
+import IconButton from "@/src/components/IconButton";
 
 
 export default function Home() {
@@ -21,10 +22,10 @@ export default function Home() {
   nowPlaying.loading
 ) {
     return (
-      <View>
-        <ActivityIndicator size="large" />
-      </View>
-    );
+                <View style={styles.loadingContainer}>
+                    <ActivityIndicator size="large" color="white" />
+                </View>
+            );
   }
 
   if (
@@ -48,26 +49,15 @@ export default function Home() {
       <SafeAreaView>
         <StatusBar barStyle="light-content" />
         <View style={styles.header}>
-          <Pressable>
-            <Ionicons
-              name="menu"
-              size={24}
-              color="white"
-            />
-          </Pressable>
-
           <Image
             source={require("@/src/assets/images/logo1.png")}
             style={styles.logo}
           />
 
-          <Pressable onPress={()=> router.push("/(tabs)/search")}>
-            <Ionicons
-              name="search"
-              size={24}
-              color="white"
-            />
-          </Pressable>
+          <IconButton
+            icon="search"
+            onPress={() => router.push("/(tabs)/search")}
+          />
         </View>
       </SafeAreaView>
 
@@ -122,4 +112,11 @@ const styles = StyleSheet.create({
   searchButton: {
     padding: 8,
   },
+  
+    loadingContainer: {
+        flex: 1,
+        backgroundColor: "#000",
+        alignItems: "center",
+        justifyContent: "center",
+    },
 });

@@ -11,6 +11,10 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { COLORS } from "../constants/colors";
 import { MovieList } from "../types/list";
+import IconButton from "./IconButton";
+import { router } from "expo-router";
+import ActionButton from "./ActionButton";
+import PrimaryButton from "./PrimaryButton";
 
 
 interface ModalAddToListProps {
@@ -65,21 +69,14 @@ export default function ModalAddToList({
 
         {/* Header */}
         <View style={styles.header}>
-          <Text style={styles.title}>
-            Agregar a una lista
-          </Text>
-
-          <Pressable
-            style={styles.closeButton}
-            onPress={onClose}
-          >
-            <Ionicons
-              name="close"
-              size={28}
-              color="white"
-            />
-          </Pressable>
-        </View>
+                        <Text style={styles.title}>Agregar a lista</Text>
+        
+                        <IconButton
+                          icon="close"
+                          onPress={() => router.back()}
+                          style={styles.close}
+                        />
+                    </View>
 
         <ScrollView contentContainerStyle={styles.content}>
 
@@ -121,20 +118,11 @@ export default function ModalAddToList({
 
               <View style={styles.divider} />
 
-              <Pressable
-                style={styles.newListButton}
+              <ActionButton
+                icon="add-circle-outline"
+                title="Crear nueva lista"
                 onPress={() => setShowNewList(true)}
-              >
-                <Ionicons
-                  name="add-circle-outline"
-                  size={24}
-                  color="white"
-                />
-
-                <Text style={styles.newListText}>
-                  Crear nueva lista
-                </Text>
-              </Pressable>
+              />
             </>
           ) : (
             <>
@@ -154,18 +142,11 @@ export default function ModalAddToList({
                 onChangeText={setListName}
               />
 
-              <Pressable
-                style={[
-                  styles.createButton,
-                  !listName.trim() && styles.disabledButton,
-                ]}
-                disabled={!listName.trim()}
-                onPress={handleCreateList}
-              >
-                <Text style={styles.createButtonText}>
-                  Crear lista
-                </Text>
-              </Pressable>
+              <PrimaryButton 
+                title={"Crear lista"} 
+                onPress={handleCreateList} 
+                disabled={!listName.trim()}>
+              </PrimaryButton>
 
               <Pressable
                 style={styles.backButton}
@@ -317,4 +298,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "600",
   },
+  close:{
+        position:'absolute',
+        right: 15,
+        padding:6,
+    },
 });

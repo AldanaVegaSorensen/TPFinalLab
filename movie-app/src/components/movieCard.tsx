@@ -16,9 +16,13 @@ export default function MovieCard({
   return (
     <Pressable onPress={() => router.push(`/movie/${movie.id}`)}>
       <Image
-        source={{
-          uri: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
-        }}
+        source={
+          movie.poster_path
+            ? {
+                uri: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
+              }
+            : require("../assets/images/no poster.png")
+        }
         style={[
           styles.image,
           {

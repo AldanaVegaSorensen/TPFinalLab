@@ -1,13 +1,12 @@
 import { View, ScrollView, Image, StyleSheet, Text, TouchableOpacity, FlatList, ActivityIndicator } from "react-native";
-import SearchBar from "@/src/components/SearchBar";
+import { SearchBar } from "@/src/components/SearchBar";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import MovieCard from "@/src/components/movieCard";
 import { useEffect, useState } from "react";
-import { Movie } from "@/src/types/movie";
+import { Genre, Movie } from "@/src/types/movie";
 import { movieService } from "@/src/services/movie.service";
 import { useAllMovies } from "@/src/hooks/useAllMovies";
-import { FilterItem } from "@/src/components/filterItem";
 
 
 export default function Search() {
@@ -22,27 +21,66 @@ export default function Search() {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [query, setQuery] = useState("");
   const [searching, setSearching] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
-  const displayedMovies = query.trim() ? movies : initialMovies;
+  useEffect(() => {
+    const trimmedQuery = searchQuery.trim();
+
+    if (!trimmedQuery) {
+      setMovies([]);
+      setQuery("");
+      return;
+    }
+
+    const timeout = setTimeout(async () => {
+      try {
+        setSearching(true);
+
+        const data = await movieService.searchMovies(
+          trimmedQuery
+        );
+
+        setMovies(data.results);
+        setQuery(trimmedQuery);
+
+      } catch (error) {
+        console.error(
+          "Error buscando películas:",
+          error
+        );
+      } finally {
+        setSearching(false);
+      }
+    }, 500);
+
+    return () => clearTimeout(timeout);
+  }, [searchQuery]);
+
+  const displayedMovies = query.trim()
+    ? movies
+    : initialMovies;
 
   if (loading) {
-    return (
-      <View>
-        <ActivityIndicator size="large" />
-      </View>
-    );
-  }
-
-  if (error) {
-    return (
-      <View>
-        <Text>{error}</Text>
-      </View>
-    );
-  }
+          return (
+              <View style={styles.loadingContainer}>
+                  <ActivityIndicator size="large" color="white" />
+              </View>
+          );
+      }
+  
+      if (error) {
+          return (
+              <View style={styles.container}>
+                  <Text style={styles.errorText}>
+                    {error }
+                  </Text>                  
+              </View>
+          );
+      }
 
   return (
     <View style={styles.container}>
+
       <View
         style={{
           flexDirection: "row",
@@ -51,20 +89,11 @@ export default function Search() {
           marginLeft: 10,
         }}
       >
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          <FilterItem title="Categoria" />
-          <FilterItem title="Región" />
-          <FilterItem title="Categoria" />
-          <FilterItem title="Región" />
-        </ScrollView>
-
-        <TouchableOpacity activeOpacity={0.8} style={{ padding: 10 }}>
-          <Ionicons
-            name="filter"
-            size={24}
-            color="white"
-          />
-        </TouchableOpacity>
+        <SearchBar
+          placeholder="Buscar películas..."
+          value={searchQuery}
+          onChangeText={setSearchQuery}
+        />
       </View>
 
       <FlatList
@@ -82,12 +111,8 @@ export default function Search() {
         )}
         numColumns={3}
         columnWrapperStyle={styles.row}
-
-        // Cargar más cuando llegamos al final
         onEndReached={loadMoreMovies}
         onEndReachedThreshold={0.5}
-
-        // Loading al final de la lista
         ListFooterComponent={
           loadingMore ? (
             <View style={{ paddingVertical: 20 }}>
@@ -96,6 +121,7 @@ export default function Search() {
           ) : null
         }
       />
+
     </View>
   );
 }
@@ -121,4 +147,16 @@ const styles =StyleSheet.create({
     justifyContent: "space-between",
     marginBottom: 20,
   },
+  errorText: {
+        color: "white",
+        fontSize: 16,
+        textAlign: "center",
+        paddingHorizontal: 20,
+    },
+    loadingContainer: {
+        flex: 1,
+        backgroundColor: "#000",
+        alignItems: "center",
+        justifyContent: "center",
+    },
 })

@@ -14,6 +14,7 @@ import MovieCarousel from "@/src/components/movieCarrousel";
 import { useFocusEffect } from "@react-navigation/native";
 import { useCallback } from "react";
 import { router } from "expo-router";
+import PrimaryButton from "@/src/components/PrimaryButton";
 
 interface TokenPayload {
     userId: number;
@@ -69,29 +70,27 @@ export default function Profile() {
           title="Películas vistas"
           movies={movies}
         />
+
+        <View style={styles.divider} />
       </View>
 
-      <View style={styles.divider} />
+      
 
+    <View style={styles.buttonsContainer}>
       {/* LISTAS */}
-      <Pressable
+      <PrimaryButton
+        title="Mis listas"
         onPress={() => router.push("/lists")}
-        style={styles.button}
-      >
-        <Text style={styles.buttonText}>
-          Mis listas
-        </Text>
-      </Pressable>
+      />
 
       {/* CERRAR SESIÓN */}
-      <Pressable
+      <PrimaryButton
+        title="Cerrar sesión"
         onPress={signOut}
-        style={styles.button}
-      >
-        <Text style={styles.buttonText}>
-          Cerrar sesión
-        </Text>
-      </Pressable>
+      />
+
+    </View>
+      
 
     </View>
   );
@@ -125,26 +124,21 @@ const styles = StyleSheet.create({
 
   historyContainer: {
     width: "100%",
+    paddingHorizontal:20,
+    gap:24,
   },
 
   divider: {
     height: 1,
     backgroundColor: "white",
     width: "100%",
-    marginVertical: 20,
   },
 
-  button: {
-    backgroundColor: "#BA90B9",
-    paddingHorizontal: 24,
-    paddingVertical: 12,
-    borderRadius: 8,
-    marginVertical: 6,
-  },
-
-  buttonText: {
-    color: "#fff",
-    fontWeight: "bold",
+  buttonsContainer: {
+    flexDirection: "column",
+    width: "100%",
+    padding:20,
+    gap:24,
   },
 
   errorText: {

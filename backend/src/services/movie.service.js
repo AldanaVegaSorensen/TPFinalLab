@@ -32,16 +32,6 @@ async function getNowPlayingMovies() {
     return data.results;
 }
 
-async function getMoviesByGenre(genreId) {
-  const { data } = await api.get("/discover/movie", {
-    params: {
-      with_genres: genreId,
-    },
-  });
-
-  return data.results;
-}
-
 async function getMovieById(id) {
   const { data } = await api.get(`/movie/${id}`,{
     params: {
@@ -78,7 +68,7 @@ async function getMovies(cantidad = 10, from = 0) {
 }
 
 async function searchMovies(query, page = 1){
-    const response = await tmdb.get("/search/movie", {
+    const response = await api.get("/search/movie", {
         params: {
             query,
             page,
@@ -94,7 +84,6 @@ module.exports = {
     getPopularMovies,
     getTopRatedMovies,
     getUpcomingMovies,
-    getMoviesByGenre,
     getNowPlayingMovies,
     getMovieById,
     getMovies,

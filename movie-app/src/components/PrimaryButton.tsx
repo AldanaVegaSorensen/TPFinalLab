@@ -1,13 +1,13 @@
-import React from 'react';
+import React from "react";
 import {
-  TouchableOpacity,
+  Pressable,
   Text,
   StyleSheet,
   ActivityIndicator,
-  TouchableOpacityProps,
-} from 'react-native';
+  PressableProps,
+} from "react-native";
 
-interface PrimaryButtonProps extends TouchableOpacityProps {
+interface PrimaryButtonProps extends PressableProps {
   title: string;
   loading?: boolean;
 }
@@ -16,16 +16,22 @@ export default function PrimaryButton({
   title,
   loading = false,
   disabled,
+  style,
   ...props
 }: PrimaryButtonProps) {
+  const isDisabled = disabled || loading;
+
   return (
-    <TouchableOpacity
-      style={[
+    <Pressable
+      style={(state) => [
         styles.button,
-        (disabled || loading) && styles.disabled,
+        isDisabled && styles.disabled,
+        state.pressed && !isDisabled && styles.pressed,
+        typeof style === "function"
+          ? style(state)
+          : style,
       ]}
-      disabled={disabled || loading}
-      activeOpacity={0.8}
+      disabled={isDisabled}
       {...props}
     >
       {loading ? (
@@ -33,25 +39,29 @@ export default function PrimaryButton({
       ) : (
         <Text style={styles.text}>{title}</Text>
       )}
-    </TouchableOpacity>
+    </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: '#2563EB',
-    height: 50,
-    borderRadius: 12,
-    justifyContent: 'center',
-    alignItems: 'center',
+    paddingVertical: 14,
     paddingHorizontal: 20,
-  },
-  disabled: {
-    opacity: 0.6,
+    borderRadius: 8,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor:"#4CD5CA", 
+    borderColor: "#36C1B5",
   },
   text: {
-    color: '#FFFFFF',
-    fontSize: 16,
-    fontWeight: '600',
+    color: "#FFFFFF",
+    fontSize: 20,
+    fontWeight: "bold",
+  },
+  disabled: {
+    opacity: 0.5,
+  },
+  pressed: {
+    opacity: 0.8,
   },
 });

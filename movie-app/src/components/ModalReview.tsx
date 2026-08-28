@@ -5,6 +5,7 @@ import { Fecha } from "./Fecha";
 import { useEffect, useState } from "react";
 import { COLORS } from "../constants/colors";
 import { Review } from "../types/review";
+import PrimaryButton from "./PrimaryButton";
 
 
 interface ModalReviewProps {
@@ -92,12 +93,13 @@ export default function ModalReview({
                     <TextInput style={styles.textInput} placeholder="Haz un comentario..." multiline textAlignVertical="top" onChangeText={setComment} value={comment}></TextInput>
                 </View>
                 
-                <Pressable
-                    style={styles.actionButton}
+                <View style={styles.content}>
+                    <PrimaryButton
+                    title="Guardar"
                     onPress={handleSave}
-                >
-                    <Text style={styles.actionText}>Guardar</Text>
-                </Pressable>
+                />
+                </View>
+                
                 
             </View>
         </Modal>

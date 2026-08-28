@@ -21,9 +21,18 @@ export function useAllMovies() {
       setMovies(data.results);
       setFrom(PAGE_SIZE);
 
-    } catch (error) {
-      console.error("Error cargando películas:", error);
-      setError("No se pudieron cargar las películas");
+    } catch (error:any) {
+        console.error("Error cargando películas:", error);
+
+        const status = error.response?.status;
+
+        if (status === 404) {
+          setError("No se encontraron películas");
+        } else if (status === 400) {
+          setError("Error en los datos");
+        } else {
+          setError("No se pudieron cargar las películas");
+        }
     } finally {
       setLoading(false);
     }
@@ -48,8 +57,18 @@ export function useAllMovies() {
 
       setFrom((prev) => prev + PAGE_SIZE);
 
-    } catch (error) {
+    } catch (error:any) {
       console.error("Error cargando más películas:", error);
+
+        const status = error.response?.status;
+
+        if (status === 404) {
+          setError("No se encontraron películas");
+        } else if (status === 400) {
+          setError("Error en los datos");
+        } else {
+          setError("No se pudieron cargar las películas");
+        }
     } finally {
       setLoadingMore(false);
     }
@@ -65,6 +84,5 @@ export function useAllMovies() {
     loadingMore,
     error,
     loadMoreMovies,
-    //hasMore,
   };
 }

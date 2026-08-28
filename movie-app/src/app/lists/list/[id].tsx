@@ -1,3 +1,4 @@
+import IconButton from "@/src/components/IconButton";
 import MovieCard from "@/src/components/movieCard";
 import { COLORS } from "@/src/constants/colors";
 import { useLists } from "@/src/hooks/useList";
@@ -106,15 +107,12 @@ export default function ListScreen() {
   };
 
   if (loading) {
-    return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator
-          size="large"
-          color="#BA90B9"
-        />
-      </View>
-    );
-  }
+          return (
+              <View style={styles.loadingContainer}>
+                  <ActivityIndicator size="large" color="white" />
+              </View>
+          );
+      }
 
   
 console.log("MOVIES PARA MOSTRAR:", movies);
@@ -139,22 +137,33 @@ console.log("MOVIES PARA MOSTRAR:", movies);
         <View style={styles.headerActions}>
 
           {editingName ? (
-            <Pressable
-              style={styles.iconButton}
+            // <Pressable
+            //   style={styles.iconButton}
+            //   onPress={handleUpdateName}
+            // >
+            //   <Ionicons name="checkmark" size={24} color="white" />
+            // </Pressable>
+
+            <IconButton
+              icon="checkmark"
               onPress={handleUpdateName}
-            >
-              <Ionicons name="checkmark" size={24} color="white" />
-            </Pressable>
+            />
           ) : (
-            <Pressable
-              style={styles.iconButton}
+            // <Pressable
+            //   style={styles.iconButton}
+            //   onPress={() => setEditingName(true)}
+            // >
+            //   <Ionicons name="pencil" size={22} color="white" />
+            // </Pressable>
+
+            <IconButton
+              icon="pencil"
               onPress={() => setEditingName(true)}
-            >
-              <Ionicons name="pencil" size={22} color="white" />
-            </Pressable>
+            />
+            
           )}
 
-          <Pressable
+          {/* <Pressable
             style={styles.iconButton}
             onPress={() => setEditMode((prev) => !prev)}
           >
@@ -163,15 +172,24 @@ console.log("MOVIES PARA MOSTRAR:", movies);
               size={22}
               color="white"
             />
-          </Pressable>
+          </Pressable> */}
+          <IconButton
+              icon={editMode ? "checkmark-done" : "trash-outline"}
+              onPress={() => setEditMode((prev) => !prev)}
+            />
 
-          <Pressable style={styles.close} onPress={() => router.back()}>
+          {/* <Pressable style={styles.close} onPress={() => router.back()}>
             <Ionicons
               name="close"
               size={28}
               color="white"
             />
-          </Pressable>
+          </Pressable> */}
+
+          <IconButton
+              icon="close"
+              onPress={() => router.back()}
+            />
 
         </View>
       </View>
