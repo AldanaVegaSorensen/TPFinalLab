@@ -1,6 +1,7 @@
 import React from "react";
 import { View, StyleSheet, TextInput } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { COLORS } from "../constants/colors";
 
 interface Props {
   placeholder?: string;
@@ -24,6 +25,7 @@ export const SearchBar = ({
 
       <TextInput
         placeholder={placeholder}
+        placeholderTextColor={COLORS.textSecondary}
         value={value}
         onChangeText={onChangeText}
         clearButtonMode="always"
@@ -52,6 +54,7 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     paddingVertical: 10,
+    color: COLORS.text
   },
 });
 
