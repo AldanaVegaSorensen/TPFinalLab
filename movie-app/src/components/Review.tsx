@@ -1,14 +1,8 @@
 import { Ionicons } from "@expo/vector-icons";
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Pressable,
-} from "react-native";
-import { COLORS } from '@/src/constants/colors';
+import { View, Text, Pressable, } from "react-native";
 import { useSession } from "../context/AuthContext";
 import { Review } from "../types/review";
+import { styles } from "../styles/review.styles";
 
 interface ReviewsProps {
     reviews: Review[];
@@ -66,7 +60,7 @@ console.log(reviews)
                   </Pressable>
 
                   <Pressable onPress={() => onDelete(review.id)}>
-                      <Text>Eliminar</Text>
+                      <Text style={{color:'white'}}>Eliminar</Text>
                   </Pressable>
               </View>
           )}
@@ -76,64 +70,3 @@ console.log(reviews)
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    marginTop: 25,
-    marginBottom: 20,
-    paddingHorizontal: 15,
-  },
-
-  title: {
-    color: "white",
-    fontSize: 18,
-    fontWeight: "bold",
-    marginBottom: 15,
-  },
-
-  review: {
-    backgroundColor: COLORS.surface,
-    borderRadius: 12,
-    padding: 15,
-    marginBottom: 10,
-  },
-
-  header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-
-  user: {
-    color: "white",
-    fontWeight: "600",
-  },
-
-  rating: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 4,
-  },
-
-  star: {
-    color: COLORS.accent,
-    fontSize: 16,
-  },
-
-  ratingText: {
-    color: COLORS.text,
-    fontWeight: "600",
-  },
-
-  comment: {
-    color: COLORS.text,
-    marginTop: 8,
-    lineHeight: 20,
-  },
-
-  date: {
-    color: COLORS.textSecondary,
-    fontSize: 11,
-    marginTop: 8,
-  },
-});

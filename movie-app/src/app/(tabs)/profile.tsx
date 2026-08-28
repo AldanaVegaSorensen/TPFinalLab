@@ -1,24 +1,14 @@
-import {
-  View,
-  Text,
-  Pressable,
-  StyleSheet,
-  Image,
-  ActivityIndicator,
-} from "react-native";
-
+import { View, Text, Image, ActivityIndicator,} from "react-native";
 import { useSession } from "@/src/context/AuthContext";
 import { useHistory } from "@/src/hooks/useHistory";
 import MovieCarousel from "@/src/components/movieCarrousel";
-
 import { useFocusEffect } from "@react-navigation/native";
 import { useCallback } from "react";
 import { router } from "expo-router";
 import PrimaryButton from "@/src/components/PrimaryButton";
+import { commonStyles } from "@/src/styles/general";
+import { styles } from "@/src/styles/profile.styles";
 
-interface TokenPayload {
-    userId: number;
-}
 export default function Profile() {
   const { signOut, user } = useSession();
 
@@ -33,7 +23,7 @@ export default function Profile() {
 
   if (loading) {
     return (
-      <View style={styles.container}>
+      <View style={commonStyles.loadingContainer}>
         <ActivityIndicator size="large" color="white" />
       </View>
     );
@@ -41,8 +31,8 @@ export default function Profile() {
 
   if (error) {
     return (
-      <View style={styles.container}>
-        <Text style={styles.errorText}>
+      <View style={commonStyles.loadingContainer}>
+        <Text style={commonStyles.errorText}>
           {error}
         </Text>
       </View>
@@ -50,16 +40,16 @@ export default function Profile() {
   }
 
   return (
-    <View style={styles.container}>
+    <View style={commonStyles.darkContainer}>
 
       {/* PERFIL */}
-      <View style={styles.containerProfile}>
+      <View style={commonStyles.containerProfile}>
         <Image
           source={require("@/src/assets/images/Person_Placeholder.png")}
-          style={styles.profilePic}
+          style={commonStyles.profilePic}
         />
 
-        <Text style={styles.texto}>
+        <Text style={commonStyles.text}>
           {user?.name ?? "Usuario"}
         </Text>
       </View>
@@ -71,7 +61,7 @@ export default function Profile() {
           movies={movies}
         />
 
-        <View style={styles.divider} />
+        <View style={commonStyles.divider} />
       </View>
 
       
@@ -96,55 +86,3 @@ export default function Profile() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#000",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-
-  containerProfile: {
-    alignItems: "center",
-    marginBottom: 30,
-  },
-
-  profilePic: {
-    width: 110,
-    height: 110,
-    borderRadius: 55,
-    marginBottom: 12,
-  },
-
-  texto: {
-    color: "#fff",
-    fontSize: 24,
-    marginBottom: 24,
-  },
-
-  historyContainer: {
-    width: "100%",
-    paddingHorizontal:20,
-    gap:24,
-  },
-
-  divider: {
-    height: 1,
-    backgroundColor: "white",
-    width: "100%",
-  },
-
-  buttonsContainer: {
-    flexDirection: "column",
-    width: "100%",
-    padding:20,
-    gap:24,
-  },
-
-  errorText: {
-    color: "white",
-    fontSize: 16,
-    textAlign: "center",
-    paddingHorizontal: 20,
-  },
-});

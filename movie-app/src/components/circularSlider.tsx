@@ -1,8 +1,9 @@
-import { View, Text, StyleSheet, Dimensions } from 'react-native'
+import { View, Text, Dimensions } from 'react-native'
 import { Movie } from '../types/movie';
 import { Carousel } from "react-native-reanimated-carousel";
-import { COLORS } from '@/src/constants/colors';
 import MovieCard from './movieCard';
+import { styles } from '../styles/circularSlider.styles';
+import { commonStyles } from '../styles/general';
 
 
 const { width, height } = Dimensions.get("screen")
@@ -18,7 +19,7 @@ type Props = {
 export default function CircularSlider( {title, movies}: Props){
   return(
       <View style={styles.container}>
-          <Text style={styles.sectionTitle}>
+          <Text style={commonStyles.title}>
             {title}
           </Text>
           <Carousel
@@ -45,25 +46,3 @@ export default function CircularSlider( {title, movies}: Props){
 }
 
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    width: "100%",
-    justifyContent: "center",
-    marginVertical: 10
-  },
-
-  slide: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center"
-  },
-
-  sectionTitle: {
-    fontSize: 20,
-    fontWeight: "bold",
-    marginBottom: 12,
-    marginLeft: 10,
-    color: COLORS.text
-  },
-});

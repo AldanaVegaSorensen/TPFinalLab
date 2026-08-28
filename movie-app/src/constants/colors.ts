@@ -1,13 +1,16 @@
 export const COLORS = {
-  primary: '#F05A8A',
-  secondary: '#FFB3C7',
-  accent: '#FFC857',
+  primary: '#FF5C9E',
+  primaryHover: '#FF77AD',
+  secondary: '#C77BA8',
+  accent: '#F0D68C',
+  accent2:'#6e8fc2',
 
-  background: '#111018',
-  surface: '#1C1A24',
+  background: '#201C2B',
+  surface: '#2A2536',
 
-  text: '#FFF5F7',
-  textSecondary: "#a3a3a3",
+  text: '#F7F6F9',
+  textSecondary: "#A79FB3",
+  divider:'#2E2A3D',
 
   error: '#E85D75',
 };

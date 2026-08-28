@@ -17,6 +17,8 @@ import { useHistory } from "../../hooks/useHistory";
 import { useLists } from "@/src/hooks/useList";
 import { Review } from "@/src/types/review";
 import ActionButton from "@/src/components/ActionButton";
+import { commonStyles } from "@/src/styles/general";
+import { movieStyles } from "@/src/styles/movie.styles";
 
 const {width, height} = Dimensions.get('screen');
 
@@ -93,6 +95,7 @@ export default function MovieDetailScreen() {
 
         setIsModalVisible(true);
     };
+
     const watchedAt = history?.movies.find(
         (item) => item.movie_id === Number(id)
     )?.watched_at;
@@ -174,7 +177,7 @@ export default function MovieDetailScreen() {
 
   if (loading) {
     return (
-        <View style={styles.loadingContainer}>
+        <View style={commonStyles.loadingContainer}>
             <ActivityIndicator size="large" color="white" />
         </View>
     );
@@ -182,8 +185,8 @@ export default function MovieDetailScreen() {
 
   if (error || !movie) {
     return (
-          <View style={styles.container}>
-            <Text style={styles.errorText}>
+          <View style={commonStyles.darkContainer}>
+            <Text style={commonStyles.errorText}>
               {error ?? "Película no encontrada"}
             </Text>
           </View>
@@ -192,11 +195,11 @@ export default function MovieDetailScreen() {
 
   return (
     <ScrollView
-        contentContainerStyle={{paddingBottom:20, backgroundColor: COLORS.background,}}
+        contentContainerStyle={movieStyles.contentContainer}
     >
         <View style={{width: "100%"}}>
             {/*Header */}
-            <SafeAreaView style={styles.container}>
+            <SafeAreaView style={movieStyles.container}>
                 <Pressable style={{padding: 4, borderRadius: 12 }} onPress={()=> router.back()}>
                     <Ionicons
                         name="arrow-back"
@@ -233,22 +236,22 @@ export default function MovieDetailScreen() {
 
                 {/*INFO */}
                 <View style={{marginTop: -(height*0.09), gap: 12}}>
-                    <Text style={styles.title}>{movie.title}</Text>
-                    <Text style={styles.info}>{movie.release_date} | {movie.runtime}m | {movie.genres.map((genre) => genre.name).join(" • ")} </Text>
-                    <Text style={styles.sinopsis}>{movie.overview}</Text>
+                    <Text style={movieStyles.title}>{movie.title}</Text>
+                    <Text style={movieStyles.info}>{movie.release_date} | {movie.runtime}m | {movie.genres.map((genre) => genre.name).join(" • ")} </Text>
+                    <View style={movieStyles.rating}>
+                        <Ionicons name="star" size={18} color="#FFD700" />
+
+                        <Text style={movieStyles.ratingText}>
+                            {movie.vote_average.toFixed(1)}
+                        </Text>
+                    </View>
+                    <Text style={movieStyles.sinopsis}>{movie.overview}</Text>
                 </View>
         </View>
 
-        <View style={styles.rating}>
-            <Ionicons name="star" size={18} color="#FFD700" />
-
-            <Text style={styles.ratingText}>
-                {movie.vote_average.toFixed(1)}
-            </Text>
-        </View>
 
         {/*ACCIONES */}
-        <View style={styles.actions}>
+        <View style={movieStyles.actions}>
             
             <ActionButton
                 icon="add-circle"
@@ -299,80 +302,3 @@ export default function MovieDetailScreen() {
     </ScrollView>
   );
 }
-
-const styles  = StyleSheet.create({
-    container: {
-        position: "absolute", 
-        zIndex: 20, 
-        width: "100%", 
-        flexDirection: "row", 
-        justifyContent: "space-between", 
-        alignItems: 'center',
-        paddingHorizontal: 4,
-    },
-    title:{
-        color:COLORS.text,
-        textAlign:"center",
-        fontSize: 24
-    },
-    info:{
-        color: COLORS.textSecondary,
-        fontWeight: "600",
-        fontSize: 16,
-        textAlign: "center"
-    },
-    sinopsis:{
-        color: COLORS.textSecondary,
-        fontSize: 15,
-        lineHeight: 22,
-        marginTop: 4,
-        marginHorizontal:15,
-    },
-    actions: {
-        flexDirection: "row",
-        gap: 12,
-        marginTop: 20,
-        paddingHorizontal: 15,
-    },
-
-    actionButton: {
-        flex: 1,
-        height: 48,
-        borderRadius: 10,
-        backgroundColor: COLORS.primary,
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "center",
-        gap: 8,
-    },
-
-    actionText: {
-        color: COLORS.text,
-        fontSize: 14,
-        fontWeight: "600",
-    },
-    rating: {
-        flexDirection: "row",
-        alignItems: "center",
-        gap: 5,
-    },
-
-    ratingText: {
-        color: COLORS.text,
-        fontSize: 16,
-        fontWeight: "600",
-    },
-    errorText: {
-        color: "white",
-        fontSize: 16,
-        textAlign: "center",
-        paddingHorizontal: 20,
-    },
-    loadingContainer: {
-        flex: 1,
-        backgroundColor: "#000",
-        alignItems: "center",
-        justifyContent: "center",
-    },
-
-})

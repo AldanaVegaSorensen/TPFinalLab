@@ -1,6 +1,8 @@
-import { View, Text, FlatList, StyleSheet } from "react-native";
+import { View, Text, FlatList,  } from "react-native";
 import MovieCard from "@/src/components/movieCard";
 import { Movie } from "@/src/types/movie";
+import { carouselStyles } from "../styles/carousel.styles";
+import { commonStyles } from "../styles/general";
 
 type Props = {
   title: string;
@@ -12,8 +14,8 @@ export default function MovieCarousel({
   movies,
 }: Props) {
   return (
-    <View style={[styles.section]}>
-      <Text style={styles.sectionTitle}>
+    <View style={[carouselStyles.section]}>
+      <Text style={commonStyles.title}>
         {title}
       </Text>
       <FlatList
@@ -29,19 +31,3 @@ export default function MovieCarousel({
   );
 }
 
-const styles = StyleSheet.create({
-  section: {
-    marginBottom: 24,
-    marginVertical: 5
-  },
-  sectionTitle: {
-    fontSize: 20,
-    marginBottom:3,
-    color: "white",
-    marginLeft:10
-  },
-
-  listContent: {
-    paddingHorizontal: 16,
-  },
-});

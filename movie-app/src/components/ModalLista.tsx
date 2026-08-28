@@ -1,13 +1,5 @@
 import { useState } from "react";
-import {
-  Modal,
-  View,
-  Text,
-  Pressable,
-  TextInput,
-  StyleSheet,
-  ScrollView,
-} from "react-native";
+import { Modal, View, Text, Pressable, TextInput, ScrollView, } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { COLORS } from "../constants/colors";
 import { MovieList } from "../types/list";
@@ -15,6 +7,9 @@ import IconButton from "./IconButton";
 import { router } from "expo-router";
 import ActionButton from "./ActionButton";
 import PrimaryButton from "./PrimaryButton";
+import { modalStyles } from "../styles/modalList.styles";
+import { commonStyles } from "../styles/general";
+import { listStyles } from "../styles/list.styles";
 
 
 interface ModalAddToListProps {
@@ -65,24 +60,23 @@ export default function ModalAddToList({
       presentationStyle="pageSheet"
       onRequestClose={onClose}
     >
-      <View style={styles.container}>
+      <View style={commonStyles.darkContainer}>
 
         {/* Header */}
-        <View style={styles.header}>
-                        <Text style={styles.title}>Agregar a lista</Text>
-        
-                        <IconButton
-                          icon="close"
-                          onPress={() => router.back()}
-                          style={styles.close}
-                        />
-                    </View>
+        <View style={commonStyles.header}>
+            <Text style={commonStyles.centeredTitle}>Agregar a lista</Text>
+            <IconButton
+                icon="close"
+                onPress={() => router.back()}
+                style={commonStyles.close}
+            />
+        </View>
 
-        <ScrollView contentContainerStyle={styles.content}>
+        <ScrollView contentContainerStyle={modalStyles.content}>
 
           {!showNewList ? (
             <>
-              <Text style={styles.sectionTitle}>
+              <Text style={modalStyles.sectionTitle}>
                 Tus listas
               </Text>
 
@@ -90,7 +84,7 @@ export default function ModalAddToList({
                 lists.map((list) => (
                   <Pressable
                     key={list.id}
-                    style={styles.listButton}
+                    style={listStyles.listItem}
                     onPress={() => handleAddToList(list.id)}
                   >
                     <Ionicons
@@ -99,7 +93,7 @@ export default function ModalAddToList({
                       color={COLORS.primary}
                     />
 
-                    <Text style={styles.listName}>
+                    <Text style={listStyles.listName}>
                       {list.name}
                     </Text>
 
@@ -111,12 +105,12 @@ export default function ModalAddToList({
                   </Pressable>
                 ))
               ) : (
-                <Text style={styles.emptyText}>
+                <Text style={modalStyles.emptyText}>
                   Todavía no tenés listas creadas.
                 </Text>
               )}
 
-              <View style={styles.divider} />
+              <View style={commonStyles.divider} />
 
               <ActionButton
                 icon="add-circle-outline"
@@ -126,16 +120,16 @@ export default function ModalAddToList({
             </>
           ) : (
             <>
-              <Text style={styles.sectionTitle}>
+              <Text style={commonStyles.title}>
                 Nueva lista
               </Text>
 
-              <Text style={styles.label}>
+              <Text style={commonStyles.text}>
                 Nombre de la lista
               </Text>
 
               <TextInput
-                style={styles.input}
+                style={commonStyles.inputText}
                 placeholder="Ej: Películas favoritas"
                 placeholderTextColor="#999"
                 value={listName}
@@ -149,10 +143,10 @@ export default function ModalAddToList({
               </PrimaryButton>
 
               <Pressable
-                style={styles.backButton}
+                style={modalStyles.backButton}
                 onPress={() => setShowNewList(false)}
               >
-                <Text style={styles.backButtonText}>
+                <Text style={modalStyles.backButtonText}>
                   Volver a mis listas
                 </Text>
               </Pressable>
@@ -165,142 +159,3 @@ export default function ModalAddToList({
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#F8F5F7",
-  },
-
-  header: {
-    height: 65,
-    backgroundColor: COLORS.primary,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    paddingHorizontal: 20,
-  },
-
-  title: {
-    color: "white",
-    fontSize: 21,
-    fontWeight: "700",
-  },
-
-  closeButton: {
-    position: "absolute",
-    right: 15,
-    padding: 6,
-  },
-
-  content: {
-    padding: 20,
-    gap: 12,
-  },
-
-  sectionTitle: {
-    fontSize: 22,
-    fontWeight: "700",
-    color: COLORS.text,
-    marginBottom: 10,
-  },
-
-  listButton: {
-    backgroundColor: "white",
-    minHeight: 60,
-    borderRadius: 12,
-    paddingHorizontal: 15,
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 12,
-    borderWidth: 1,
-    borderColor: "#E5E5E5",
-  },
-
-  listName: {
-    flex: 1,
-    fontSize: 17,
-    color: COLORS.text,
-    fontWeight: "500",
-  },
-
-  emptyText: {
-    textAlign: "center",
-    color: "#777",
-    fontSize: 16,
-    marginVertical: 20,
-  },
-
-  divider: {
-    height: 1,
-    backgroundColor: "#DDD",
-    width: "100%",
-    marginVertical: 10,
-  },
-
-  newListButton: {
-    height: 50,
-    borderRadius: 12,
-    backgroundColor: COLORS.primary,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: 8,
-  },
-
-  newListText: {
-    color: "white",
-    fontSize: 17,
-    fontWeight: "600",
-  },
-
-  label: {
-    fontSize: 16,
-    fontWeight: "600",
-    color: COLORS.text,
-  },
-
-  input: {
-    backgroundColor: "white",
-    borderWidth: 1,
-    borderColor: "#DDD",
-    borderRadius: 12,
-    height: 50,
-    paddingHorizontal: 15,
-    fontSize: 16,
-  },
-
-  createButton: {
-    height: 50,
-    borderRadius: 12,
-    backgroundColor: COLORS.primary,
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 10,
-  },
-
-  disabledButton: {
-    opacity: 0.5,
-  },
-
-  createButtonText: {
-    color: "white",
-    fontSize: 17,
-    fontWeight: "600",
-  },
-
-  backButton: {
-    alignItems: "center",
-    padding: 10,
-  },
-
-  backButtonText: {
-    color: COLORS.primary,
-    fontSize: 16,
-    fontWeight: "600",
-  },
-  close:{
-        position:'absolute',
-        right: 15,
-        padding:6,
-    },
-});

@@ -1,12 +1,12 @@
-import { View, ScrollView, Image, StyleSheet, Text, TouchableOpacity, FlatList, ActivityIndicator } from "react-native";
+import { View, Text, FlatList, ActivityIndicator } from "react-native";
 import { SearchBar } from "@/src/components/SearchBar";
-import { useRouter } from "expo-router";
-import { Ionicons } from "@expo/vector-icons";
 import MovieCard from "@/src/components/movieCard";
 import { useEffect, useState } from "react";
-import { Genre, Movie } from "@/src/types/movie";
+import { Movie } from "@/src/types/movie";
 import { movieService } from "@/src/services/movie.service";
 import { useAllMovies } from "@/src/hooks/useAllMovies";
+import { commonStyles } from "@/src/styles/general";
+import { searchStyles } from "@/src/styles/search.styles";
 
 
 export default function Search() {
@@ -62,7 +62,7 @@ export default function Search() {
 
   if (loading) {
           return (
-              <View style={styles.loadingContainer}>
+              <View style={commonStyles.loadingContainer}>
                   <ActivityIndicator size="large" color="white" />
               </View>
           );
@@ -70,8 +70,8 @@ export default function Search() {
   
       if (error) {
           return (
-              <View style={styles.container}>
-                  <Text style={styles.errorText}>
+              <View style={commonStyles.darkContainer}>
+                  <Text style={commonStyles.errorText}>
                     {error }
                   </Text>                  
               </View>
@@ -79,15 +79,10 @@ export default function Search() {
       }
 
   return (
-    <View style={styles.container}>
+    <View style={commonStyles.darkContainer}>
 
       <View
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-          marginVertical: 20,
-          marginLeft: 10,
-        }}
+        style={searchStyles.barContainer}
       >
         <SearchBar
           placeholder="Buscar películas..."
@@ -110,7 +105,7 @@ export default function Search() {
           <MovieCard movie={item} />
         )}
         numColumns={3}
-        columnWrapperStyle={styles.row}
+        columnWrapperStyle={searchStyles.row}
         onEndReached={loadMoreMovies}
         onEndReachedThreshold={0.5}
         ListFooterComponent={
@@ -125,38 +120,3 @@ export default function Search() {
     </View>
   );
 }
-
-const styles =StyleSheet.create({
-  container:{
-    flex: 1,
-    backgroundColor: "#4B4545"
-  },
-
-  categoryWrapper:{
-    borderWidth: 1,
-    borderColor: "gray",
-    padding: 8,
-    borderRadius: 18,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    marginRight: 14,
-    backgroundColor: "#1B1919"
-  },
-  row: {
-    justifyContent: "space-between",
-    marginBottom: 20,
-  },
-  errorText: {
-        color: "white",
-        fontSize: 16,
-        textAlign: "center",
-        paddingHorizontal: 20,
-    },
-    loadingContainer: {
-        flex: 1,
-        backgroundColor: "#000",
-        alignItems: "center",
-        justifyContent: "center",
-    },
-})

@@ -1,6 +1,7 @@
 import React from "react";
 import { Pressable, PressableProps, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { commonStyles } from "../styles/general";
 
 interface IconButtonProps extends PressableProps {
   icon: keyof typeof Ionicons.glyphMap;
@@ -10,7 +11,7 @@ interface IconButtonProps extends PressableProps {
 
 export default function IconButton({
   icon,
-  size = 24,
+  size = 30,
   color = "white",
   style,
   ...props
@@ -20,7 +21,7 @@ export default function IconButton({
       {...props}
       style={(state) => [
         styles.button,
-        state.pressed && styles.pressed,
+        state.pressed && commonStyles.pressed,
         typeof style === "function"
           ? style(state)
           : style,
@@ -39,9 +40,5 @@ const styles = StyleSheet.create({
   button: {
     alignItems: "center",
     justifyContent: "center",
-  },
-
-  pressed: {
-    opacity: 0.7,
   },
 });

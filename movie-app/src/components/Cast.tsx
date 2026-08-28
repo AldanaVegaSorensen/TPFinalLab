@@ -1,10 +1,4 @@
-import {
-  View,
-  Text,
-  ScrollView,
-  StyleSheet,
-} from "react-native";
-
+import { View, Text, ScrollView, StyleSheet, } from "react-native";
 import { CastMember } from "../types/movie";
 import PersonCard from "./PersonCard";
 
